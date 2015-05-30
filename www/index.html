@@ -21,7 +21,7 @@
     <!-- your app's js -->
     <script src="js/app.js"></script>
   </head>
-  <body ng-app="sidewinder-app">
+  <body ng-app="sidewinder-app" ng-controller="StatusController">
 
     <ion-pane>
       <ion-header-bar class="bar-stable">
@@ -29,7 +29,7 @@
       </ion-header-bar>
       <ion-content>
 
-        <div ng-controller="StatusController">
+        <div>
 
           <div class="card" ng-repeat="repoAssessment in repoAssessments">
             <div ng-switch="repoAssessment.state">
@@ -53,7 +53,13 @@
 
         </div>
       
+
       </ion-content>
+      <div class="bar bar-footer">
+          <button class="button button-clear pull-right" ng-click="refresh()">
+            <i class="icon ion-refresh"></i>
+          </button>
+        </div>
     </ion-pane>
   </body>
 </html>

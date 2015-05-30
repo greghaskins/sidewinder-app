@@ -28,15 +28,18 @@ angular.module('sidewinder-app', ['ionic'])
     },
 
   ];
-  $scope.repoAssessments = [];
-  repositories.forEach(function(repository) {
-    RepoAssessor.assess(repository).then(function(assessment) {
-      $scope.repoAssessments.push(assessment);
-    }, function(reason) {
-      console.error(reason);
-    });
+  $scope.refresh = function() {
+    $scope.repoAssessments = [];
+    repositories.forEach(function(repository) {
+      RepoAssessor.assess(repository).then(function(assessment) {
+        $scope.repoAssessments.push(assessment);
+      }, function(reason) {
+        console.error(reason);
+      });
 
-  });
+    });
+  }
+  $scope.refresh();
 
 })
 
@@ -53,6 +56,7 @@ angular.module('sidewinder-app', ['ionic'])
             name: repo,
             state: 'unknown',
           });
+          return;
         }
 
         var status = data[0];
