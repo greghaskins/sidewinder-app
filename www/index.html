@@ -34,13 +34,13 @@
           <div class="card" ng-repeat="repoStatus in repoStatuses">
             <div ng-switch="repoStatus.state">
 
-              <div ng-switch-when="success" class="item item-text-wrap item-icon-left">
-                <i class="icon ion-checkmark"></i>
+              <div ng-switch-when="success" class="item item-text-wrap">
+                <i class="icon ion-checkmark balanced">&nbsp;</i>
                 {{repoStatus.name}}
               </div>
               
-              <div ng-switch-default class="item item-text-wrap item-icon-left">
-                <i class="icon ion-close"></i>
+              <div ng-switch-default class="item item-text-wrap">
+                <i class="icon ion-close assertive">&nbsp;</i>
                 {{repoStatus.name}}
               </div>
             </div>
