@@ -1,1 +1,21 @@
-/* Empty. Add your own CSS if you like */
+/* TODO: switch to SCSS */
+
+.assessments .item > .icon {
+    left: 3px;
+}
+
+.assessments .item-icon-left {
+    padding-left: 38px;
+}
+
+.assessments .item {
+    border-left: 8px solid #444;
+}
+
+.assessments .item.success {
+    border-left-color: #33cd5f;
+}
+
+.assessments .item.failure {
+    border-left-color: #ef473a;
+}

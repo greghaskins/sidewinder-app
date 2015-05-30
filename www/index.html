@@ -24,23 +24,23 @@
             <h1 class="title">Sidewinder</h1>
         </ion-header-bar>
         <ion-content>
-            <div class="card" ng-repeat="repoAssessment in repoAssessments">
+            <div class="card assessments" ng-repeat="repoAssessment in repoAssessments">
                 <div ng-switch="repoAssessment.state">
-                    <div ng-switch-when="success" class="item item-text-wrap">
-                        <i class="icon ion-checkmark balanced">&nbsp;</i> {{repoAssessment.name}}
+                    <div ng-switch-when="success" class="success item item-text-wrap item-icon-left">
+                        <i class="icon ion-ios-checkmark-empty balanced">&#xA0;</i> {{repoAssessment.name}}
                     </div>
-                    <div ng-switch-when="unknown" class="item item-text-wrap">
-                        <i class="icon ion-help dark">&nbsp;</i> {{repoAssessment.name}}
+                    <div ng-switch-when="unknown" class="unknown item item-text-wrap item-icon-left">
+                        <i class="icon ion-ios-help-empty dark">&#xA0;</i> {{repoAssessment.name}}
                     </div>
-                    <div ng-switch-default class="item item-text-wrap">
-                        <i class="icon ion-close assertive">&nbsp;</i> {{repoAssessment.name}}
+                    <div ng-switch-default="" class="failure item item-text-wrap item-icon-left">
+                        <i class="icon ion-ios-close-empty assertive">&#xA0;</i> {{repoAssessment.name}}
                     </div>
                 </div>
             </div>
         </ion-content>
         <div class="bar bar-footer">
             <button class="button button-clear pull-right" ng-click="refresh()">
-                <i class="icon ion-refresh"></i>
+                <i class="icon ion-ios-refresh-empty"></i>
             </button>
         </div>
     </ion-pane>
