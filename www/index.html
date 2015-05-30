@@ -31,17 +31,22 @@
 
         <div ng-controller="StatusController">
 
-          <div class="card" ng-repeat="repoStatus in repoStatuses">
-            <div ng-switch="repoStatus.state">
+          <div class="card" ng-repeat="repoAssessment in repoAssessments">
+            <div ng-switch="repoAssessment.state">
 
               <div ng-switch-when="success" class="item item-text-wrap">
                 <i class="icon ion-checkmark balanced">&nbsp;</i>
-                {{repoStatus.name}}
+                {{repoAssessment.name}}
               </div>
               
+              <div ng-switch-when="unknown" class="item item-text-wrap">
+                <i class="icon ion-help dark">&nbsp;</i>
+                {{repoAssessment.name}}
+              </div>
+
               <div ng-switch-default class="item item-text-wrap">
                 <i class="icon ion-close assertive">&nbsp;</i>
-                {{repoStatus.name}}
+                {{repoAssessment.name}}
               </div>
             </div>
           </div>
