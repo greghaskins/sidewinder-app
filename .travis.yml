@@ -8,3 +8,5 @@ script:
   - npm install
   - npm run ionic -- info
   - npm test
+after_script:
+  - f=npm-debug.log; if [ -e "$f" ]; then cat "$f"; fi
