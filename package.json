@@ -40,7 +40,10 @@
     "test": "npm run karma:headless",
     "tdd": "npm run karma:watch",
 
-    "karma:watch": "karma start test/karma.conf.js --auto-watch --no-single-run",
-    "karma:headless": "karma start test/karma.conf.js --single-run --no-auto-watch"
+    "ionic": "./node_modules/ionic/bin/ionic",
+    "karma": "./node_modules/karma/bin/karma start test/karma.conf.js",
+
+    "karma:watch": "npm run karma -- --auto-watch --no-single-run",
+    "karma:headless": "npm run karma -- --single-run --no-auto-watch"
   }
 }
