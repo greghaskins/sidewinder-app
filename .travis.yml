@@ -1,7 +1,10 @@
 sudo: false
 language: objective-c
-install: 
-  - brew install node
+install:
+  - brew update
+  - brew install nvm
+  - nvm install 0.12
+  - nvm use 0.12
 script:
   - npm install
   - npm run ionic -- info
