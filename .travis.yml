@@ -4,9 +4,10 @@ install:
   - brew update
   - brew unlink node
   - brew install node
+  - npm install -g ionic cordova
 script:
   - npm install
-  - npm run ionic -- info
+  - ionic info
   - npm test
-after_script:
-  - f=npm-debug.log; if [ -e "$f" ]; then cat "$f"; fi
+after_failure:
+  - cat npm-debug.log
