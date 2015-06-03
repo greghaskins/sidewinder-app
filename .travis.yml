@@ -2,6 +2,7 @@ sudo: false
 language: objective-c
 install:
   - brew update
+  - brew unlink node
   - brew install node
 script:
   - npm install
