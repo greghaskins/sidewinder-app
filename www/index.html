@@ -24,6 +24,7 @@
             <h1 class="title">Sidewinder</h1>
         </ion-header-bar>
         <ion-content>
+            <ion-refresher on-refresh="refresh()"></ion-refresher>
             <div class="card assessments" ng-repeat="repoStatus in repoStatuses">
                 <div ng-switch="repoStatus.status.state">
                     <div ng-switch-when="success" class="success item item-text-wrap item-icon-left">
@@ -57,11 +58,6 @@
                 </div>
             </div>
         </ion-content>
-        <div class="bar bar-footer">
-            <button class="button button-clear pull-right" ng-click="refresh()">
-                <i class="icon ion-ios-refresh-empty"></i>
-            </button>
-        </div>
     </ion-pane>
 </body>
 

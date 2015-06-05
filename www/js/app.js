@@ -13,7 +13,7 @@ angular.module('sidewinder-app', ['ionic'])
     });
 })
 
-.controller('StatusController', function($scope, GitHubRepo, RepoAssessor) {
+.controller('StatusController', function($scope, GitHubRepo, StatusRefresher) {
     var repositories = [
 
         GitHubRepo('sidewinder-team', 'sidewinder-server'),
@@ -30,20 +30,37 @@ angular.module('sidewinder-app', ['ionic'])
             }
         }
     });
-    $scope.refresh = function() {
-        $scope.repoStatuses.forEach(function(repoStatus) {
-            var repository = repoStatus.repo;
-            RepoAssessor.assess(repository).then(function(assessment) {
-                    repoStatus.status = assessment;
-                },
-                function(reason) {
-                    console.error(reason);
-                });
 
-        });
+    function refreshComplete() {
+        $scope.$broadcast('scroll.refreshComplete');
+    }
+    $scope.refresh = function() {
+        StatusRefresher.refreshAll($scope.repoStatuses).then(refreshComplete, refreshComplete);
     }
     $scope.refresh();
 
+})
+
+.factory('StatusRefresher', function($q, RepoAssessor) {
+    function refreshOne(repoStatus) {
+        var defer = $q.defer();
+        var repository = repoStatus.repo;
+        RepoAssessor.assess(repository).then(function(assessment) {
+                repoStatus.status = assessment;
+                defer.resolve(assessment);
+            },
+            function(reason) {
+                console.error(reason);
+                defer.reject(reason);
+            });
+        return defer.promise;
+    }
+
+    return {
+        refreshAll: function(repoStatuses) {
+            return Promise.all(repoStatuses.map(refreshOne));
+        }
+    };
 })
 
 .factory('RepoAssessor', function($http, $q) {
