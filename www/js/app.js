@@ -19,6 +19,7 @@ angular.module('sidewinder-app', ['ionic'])
         GitHubRepo('sidewinder-team', 'sidewinder-server'),
         GitHubRepo('sidewinder-team', 'sidewinder-ios'),
         GitHubRepo('greghaskins', 'sidewinder-app'),
+        GitHubRepo('sidewinder-team' ,' sidewinder-team.github.io'),
 
     ];
     $scope.refresh = function() {

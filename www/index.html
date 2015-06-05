@@ -29,8 +29,8 @@
                     <div ng-switch-when="success" class="success item item-text-wrap item-icon-left">
                         <i class="icon ion-ios-checkmark-empty balanced">&#xA0;</i> {{repoAssessment.name}}
                     </div>
-                    <div ng-switch-when="unknown" class="unknown item item-text-wrap item-icon-left">
-                        <i class="icon ion-ios-help-empty dark">&#xA0;</i> {{repoAssessment.name}}
+                    <div ng-switch-when="pending" class="pending item item-text-wrap item-icon-left">
+                        <i class="icon ion-ios-minus-empty dark">&#xA0;</i> {{repoAssessment.name}}
                     </div>
                     <div ng-switch-default="" class="failure item item-text-wrap item-icon-left">
                         <i class="icon ion-ios-close-empty assertive">&#xA0;</i> {{repoAssessment.name}}
