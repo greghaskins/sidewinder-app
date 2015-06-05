@@ -19,7 +19,7 @@ angular.module('sidewinder-app', ['ionic'])
         GitHubRepo('sidewinder-team', 'sidewinder-server'),
         GitHubRepo('sidewinder-team', 'sidewinder-ios'),
         GitHubRepo('greghaskins', 'sidewinder-app'),
-        GitHubRepo('sidewinder-team', ' sidewinder-team.github.io'),
+        GitHubRepo('sidewinder-team', 'sidewinder-team.github.io'),
 
     ];
     $scope.repoStatuses = repositories.map(function(repo) {
@@ -49,8 +49,7 @@ angular.module('sidewinder-app', ['ionic'])
 .factory('RepoAssessor', function($http, $q) {
     return {
         assess: function(repository) {
-            var repo = repository.owner + "/" + repository.name;
-            var url = "https://api.github.com/repos/" + repo + "/commits/master/status";
+            var url = "https://api.github.com/repos/" + repository.fullName + "/commits/master/status";
 
             var deferred = $q.defer();
             $http.get(url).success(function(data) {
