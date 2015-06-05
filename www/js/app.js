@@ -26,7 +26,7 @@ angular.module('sidewinder-app', ['ionic'])
         return {
             repo: repo,
             status: {
-                state: 'pending',
+                state: 'unknown',
             }
         }
     });
