@@ -28,7 +28,7 @@ describe('the RepoAssessor', function() {
 
     });
 
-    it('returns repository state of pending when connection fails', function(done) {
+    it('returns repository state of unknown when connection fails', function(done) {
 
         $httpBackend.whenGET('https://api.github.com/repos/angular/angular.js/commits/master/status')
             .respond(500, {
@@ -38,12 +38,33 @@ describe('the RepoAssessor', function() {
         var repo = GitHubRepo('angular', 'angular.js');
 
         RepoAssessor.assess(repo).then(function(result) {
-            expect(result.state).toBe('pending');
+            expect(result.state).toBe('unknown');
         }).catch(function(error) {
             expect(error).toBeUndefined();
         }).finally(done);
 
         $httpBackend.flush();
+
+    });
+
+    it('treats a "pending" commit without any statuses as "unknown"', function(done) {
+
+        $httpBackend.whenGET('https://api.github.com/repos/sidewinder-team/sidewinder-server/commits/master/status')
+            .respond(200, {
+                state: 'pending',
+                statuses: [],
+            });
+
+        var repo = GitHubRepo('sidewinder-team', 'sidewinder-server');
+
+        RepoAssessor.assess(repo).then(function(result) {
+            expect(result.state).toBe('unknown');
+        }).catch(function(error) {
+            expect(error).toBeUndefined();
+        }).finally(done);
+
+        $httpBackend.flush();
+
 
     });
 

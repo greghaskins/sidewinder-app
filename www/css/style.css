@@ -20,6 +20,10 @@
     border-left-color: #ef473a;
 }
 
+.assessments .item.pending {
+	border-left-color: #ffc900;
+}
+
 .assessments .repo > span {
 	display: inline-block;
 }

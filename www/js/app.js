@@ -55,14 +55,18 @@ angular.module('sidewinder-app', ['ionic'])
             var deferred = $q.defer();
             $http.get(url).success(function(data) {
 
+                var state = data.state;
+                if (state === 'pending' && data.statuses.length < 1) {
+                    state = 'unknown';
+                }
                 deferred.resolve({
-                    state: data.state,
+                    state: state,
                 });
 
             }).error(function() {
 
                 deferred.resolve({
-                    state: 'pending',
+                    state: 'unknown',
                 });
 
             });
