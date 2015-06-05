@@ -24,16 +24,31 @@
             <h1 class="title">Sidewinder</h1>
         </ion-header-bar>
         <ion-content>
-            <div class="card assessments" ng-repeat="repoAssessment in repoAssessments">
-                <div ng-switch="repoAssessment.state">
+            <div class="card assessments" ng-repeat="repoStatus in repoStatuses">
+                <div ng-switch="repoStatus.status.state">
                     <div ng-switch-when="success" class="success item item-text-wrap item-icon-left">
-                        <i class="icon ion-ios-checkmark-empty balanced">&#xA0;</i> {{repoAssessment.name}}
+                        <i class="icon ion-ios-checkmark-empty balanced">&#xA0;</i>
+                        <span class="repo">  
+                          <span class="owner">{{repoStatus.repo.owner}}</span>
+                          /
+                          <span class="name">{{repoStatus.repo.name}}</span>
+                        </span>
                     </div>
                     <div ng-switch-when="pending" class="pending item item-text-wrap item-icon-left">
-                        <i class="icon ion-ios-minus-empty dark">&#xA0;</i> {{repoAssessment.name}}
+                        <i class="icon ion-ios-minus-empty dark">&#xA0;</i>
+                        <span class="repo">
+                          <span class="owner">{{repoStatus.repo.owner}}</span>
+                          /
+                          <span class="name">{{repoStatus.repo.name}}</span>
+                        </span>
                     </div>
                     <div ng-switch-default="" class="failure item item-text-wrap item-icon-left">
-                        <i class="icon ion-ios-close-empty assertive">&#xA0;</i> {{repoAssessment.name}}
+                        <i class="icon ion-ios-close-empty assertive">&#xA0;</i>
+                        <span class="repo">
+                          <span class="owner">{{repoStatus.repo.owner}}</span>
+                          /
+                          <span class="name">{{repoStatus.repo.name}}</span>
+                        </span>
                     </div>
                 </div>
             </div>

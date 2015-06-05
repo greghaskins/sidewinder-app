@@ -19,3 +19,7 @@
 .assessments .item.failure {
     border-left-color: #ef473a;
 }
+
+.assessments .repo > span {
+	display: inline-block;
+}

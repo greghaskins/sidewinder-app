@@ -19,15 +19,22 @@ angular.module('sidewinder-app', ['ionic'])
         GitHubRepo('sidewinder-team', 'sidewinder-server'),
         GitHubRepo('sidewinder-team', 'sidewinder-ios'),
         GitHubRepo('greghaskins', 'sidewinder-app'),
-        GitHubRepo('sidewinder-team' ,' sidewinder-team.github.io'),
+        GitHubRepo('sidewinder-team', ' sidewinder-team.github.io'),
 
     ];
+    $scope.repoStatuses = repositories.map(function(repo) {
+        return {
+            repo: repo,
+            status: {
+                state: 'pending',
+            }
+        }
+    });
     $scope.refresh = function() {
-        $scope.repoAssessments = [];
-        repositories.forEach(function(repository) {
+        $scope.repoStatuses.forEach(function(repoStatus) {
+            var repository = repoStatus.repo;
             RepoAssessor.assess(repository).then(function(assessment) {
-                    assessment.name = repository.fullName;
-                    $scope.repoAssessments.push(assessment);
+                    repoStatus.status = assessment;
                 },
                 function(reason) {
                     console.error(reason);
