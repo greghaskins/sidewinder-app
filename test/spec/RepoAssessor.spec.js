@@ -8,6 +8,8 @@ describe('the RepoAssessor', function() {
         $httpBackend = _$httpBackend_;
         RepoAssessor = _RepoAssessor_;
         GitHubRepo = _GitHubRepo_;
+
+        $httpBackend.whenGET(/\.html$/).respond(200, '');
     }));
 
     it('gets the repository state from GitHub combined status API', function(done) {
