@@ -13,19 +13,6 @@ angular.module('sidewinder-app', ['ionic'])
         });
 })
 
-// .config(function($routeProvider) {
-//     $routeProvider
-//         .when('/', {
-//             templateUrl: 'home.html',
-//         })
-//         .when('/settings', {
-//             templateUrl: 'settings.html',
-//         })
-//         .otherwise({
-//             redirectTo: '/',
-//         });
-// })
-
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
