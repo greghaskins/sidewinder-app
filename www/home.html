@@ -1,0 +1,44 @@
+<ion-view view-title="Sidewinder">
+    <ion-nav-buttons side="secondary">
+        <a href="#/settings" class="button button-clear">
+            <i class="icon ion-ios-gear-outline"></i>
+        </a>
+    </ion-nav-buttons>
+    <ion-pane>
+        <ion-content>
+            <ion-refresher on-refresh="refresh()"></ion-refresher>
+            <div class="card assessments" ng-repeat="repoStatus in repoStatuses">
+                <div ng-switch="repoStatus.status.state">
+                    <div ng-switch-when="success" class="success item item-text-wrap item-icon-left">
+                        <i class="icon ion-ios-checkmark-empty balanced"></i>
+                        <span class="repo">  
+                          <span class="owner">{{repoStatus.repo.owner}}</span> /
+                        <span class="name">{{repoStatus.repo.name}}</span>
+                        </span>
+                    </div>
+                    <div ng-switch-when="pending" class="pending item item-text-wrap item-icon-left">
+                        <i class="icon ion-ios-more energized"></i>
+                        <span class="repo">
+                          <span class="owner">{{repoStatus.repo.owner}}</span> /
+                        <span class="name">{{repoStatus.repo.name}}</span>
+                        </span>
+                    </div>
+                    <div ng-switch-when="unknown" class="unknown item item-text-wrap item-icon-left">
+                        <i class="icon ion-ios-minus-empty dark"></i>
+                        <span class="repo">
+                          <span class="owner">{{repoStatus.repo.owner}}</span> /
+                        <span class="name">{{repoStatus.repo.name}}</span>
+                        </span>
+                    </div>
+                    <div ng-switch-default="" class="failure item item-text-wrap item-icon-left">
+                        <i class="icon ion-ios-close-empty assertive"></i>
+                        <span class="repo">
+                          <span class="owner">{{repoStatus.repo.owner}}</span> /
+                        <span class="name">{{repoStatus.repo.name}}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>
