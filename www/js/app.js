@@ -26,23 +26,20 @@ angular.module('sidewinder-app', ['ionic'])
     });
 })
 
-.controller('StatusController', function($scope, GitHubRepo, StatusRefresher) {
-    var repositories = [
+.controller('StatusController', function($scope, repositories, StatusRefresher) {
+    $scope.repoStatuses = [];
 
-        GitHubRepo('sidewinder-team', 'sidewinder-server'),
-        GitHubRepo('sidewinder-team', 'sidewinder-ios'),
-        GitHubRepo('greghaskins', 'sidewinder-app'),
-        GitHubRepo('sidewinder-team', 'sidewinder-team.github.io'),
-
-    ];
-    $scope.repoStatuses = repositories.map(function(repo) {
-        return {
-            repo: repo,
-            status: {
-                state: 'unknown',
+    function rebuildStatuses() {
+        $scope.repoStatuses = repositories.list.map(function(repo) {
+            return {
+                repo: repo,
+                status: {
+                    state: 'unknown',
+                }
             }
-        }
-    });
+        });
+        $scope.refresh();
+    }
 
     function refreshComplete() {
         $scope.$broadcast('scroll.refreshComplete');
@@ -50,7 +47,12 @@ angular.module('sidewinder-app', ['ionic'])
     $scope.refresh = function() {
         StatusRefresher.refreshAll($scope.repoStatuses).then(refreshComplete, refreshComplete);
     }
-    $scope.refresh();
+
+    $scope.$on('$ionicView.enter', function(event, state) {
+        if (state.stateName === 'home') {
+            rebuildStatuses();
+        }
+    });
 
 })
 
@@ -120,4 +122,33 @@ angular.module('sidewinder-app', ['ionic'])
     };
 
     return GitHubRepo;
-});
+})
+
+.controller('RepoConfigController', function($scope, repositories) {
+    $scope.repositories = repositories;
+})
+
+.factory('repositories', function(GitHubRepo) {
+    var repositories = {};
+    var list = [
+
+        GitHubRepo('sidewinder-team', 'sidewinder-server'),
+        GitHubRepo('sidewinder-team', 'sidewinder-ios'),
+        GitHubRepo('greghaskins', 'sidewinder-app'),
+        GitHubRepo('sidewinder-team', 'sidewinder-team.github.io'),
+
+    ];
+    repositories.add = function(repo) {
+        list.push(repo);
+    };
+    repositories.remove = function(repo) {
+        var index = list.indexOf(repo);
+        list.splice(index, 1);
+    };
+    Object.defineProperty(repositories, 'list', {
+        get: function() {
+            return list;
+        }
+    });
+    return repositories;
+})

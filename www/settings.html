@@ -1,5 +1,11 @@
 <ion-view title="Settings">
-    <ion-content has-subheader="false">
-        Settings go here.
+    <ion-content>
+        <ion-list ng-controller="RepoConfigController" can-swipe="true">
+            <div class="item item-divider">Repositories</div>
+            <ion-item ng-repeat="repo in repositories.list">
+                {{repo.fullName}}
+                <ion-option-button class="button-assertive" ng-click="repositories.remove(repo)">Delete</ion-option-button>
+            </ion-item>
+        </ion-list>
     </ion-content>
 </ion-view>
