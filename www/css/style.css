@@ -37,6 +37,8 @@
     min-height: auto;
     line-height: 1;
     vertical-align: baseline;
+    min-height: 0;
+    max-height: auto;
 }
 
 [ng\:cloak],
