@@ -39,6 +39,11 @@
                     </div>
                 </div>
             </div>
+            <div ng-show="repoStatuses.length < 1" class="card">
+                <div class="item item-text-wrap">
+                    Use the <a href="#/settings" class="button button-inline button-clear button-positive">Settings</a> page to configure GitHub repositories you want to see here.
+                </div>
+            </div>
         </ion-content>
     </ion-pane>
 </ion-view>
