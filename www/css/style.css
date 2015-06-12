@@ -21,12 +21,17 @@
 }
 
 .assessments .item.pending {
-	border-left-color: #ffc900;
+    border-left-color: #ffc900;
 }
 
 .assessments .repo > span {
-	display: inline-block;
+    display: inline-block;
 }
+
 .item.add-repository .icon {
-	color: #33cd5f;
+    color: #33cd5f;
+}
+
+.item.add-repository .button {
+    padding: 0;
 }
