@@ -18,7 +18,10 @@ describe('the RepoAssessor', function() {
                 state: 'success',
             });
 
-        var repo = GitHubRepo('sidewinder-team', 'sidewinder-server');
+        var repo = GitHubRepo.fromObject({
+            owner: 'sidewinder-team',
+            name: 'sidewinder-server'
+        });
 
         RepoAssessor.assess(repo).then(function(result) {
             expect(result.state).toBe('success');
@@ -37,7 +40,10 @@ describe('the RepoAssessor', function() {
                 boom: 'goes the dynamite'
             });
 
-        var repo = GitHubRepo('angular', 'angular.js');
+        var repo = GitHubRepo.fromObject({
+            owner: 'angular',
+            name: 'angular.js'
+        });
 
         RepoAssessor.assess(repo).then(function(result) {
             expect(result.state).toBe('unknown');
@@ -57,7 +63,10 @@ describe('the RepoAssessor', function() {
                 statuses: [],
             });
 
-        var repo = GitHubRepo('sidewinder-team', 'sidewinder-server');
+        var repo = GitHubRepo.fromObject({
+            owner: 'sidewinder-team',
+            name: 'sidewinder-server'
+        });
 
         RepoAssessor.assess(repo).then(function(result) {
             expect(result.state).toBe('unknown');

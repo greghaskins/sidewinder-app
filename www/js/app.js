@@ -108,10 +108,10 @@ angular.module('sidewinder-app', ['ionic'])
 })
 
 .factory('GitHubRepo', function() {
-    function GitHubRepo(owner, name) {
+    function fromObject(repoInfo) {
         var repo = {
-            owner: owner,
-            name: name
+            owner: repoInfo.owner,
+            name: repoInfo.name,
         };
         Object.defineProperty(repo, 'fullName', {
             get: function() {
@@ -121,6 +121,17 @@ angular.module('sidewinder-app', ['ionic'])
         return repo;
     };
 
+    function toObject(gitHubRepo) {
+        return {
+            owner: gitHubRepo.owner,
+            name: gitHubRepo.name,
+        };
+    };
+
+    var GitHubRepo = {
+        fromObject: fromObject,
+        toObject: toObject,
+    };
     return GitHubRepo;
 })
 
@@ -136,8 +147,8 @@ angular.module('sidewinder-app', ['ionic'])
         modalScope.cancel = function() {
             modal.hide();
         };
-        modalScope.save = function(repo){
-            repositories.add(GitHubRepo(repo.owner, repo.name));
+        modalScope.save = function(repo) {
+            repositories.add(GitHubRepo.fromObject(repo));
             modal.hide();
         }
     });
@@ -165,25 +176,33 @@ angular.module('sidewinder-app', ['ionic'])
 
 .factory('repositories', function(GitHubRepo) {
     var repositories = {};
-    var list = [
-
-        GitHubRepo('sidewinder-team', 'sidewinder-server'),
-        GitHubRepo('sidewinder-team', 'sidewinder-ios'),
-        GitHubRepo('greghaskins', 'sidewinder-app'),
-        GitHubRepo('sidewinder-team', 'sidewinder-team.github.io'),
-
-    ];
+    var list = [];
     repositories.add = function(repo) {
         list.push(repo);
+        persist();
     };
     repositories.remove = function(repo) {
         var index = list.indexOf(repo);
         list.splice(index, 1);
+        persist();
     };
     Object.defineProperty(repositories, 'list', {
         get: function() {
             return list;
         }
     });
+
+
+    function persist() {
+        window.localStorage['repositories'] = JSON.stringify(list.map(GitHubRepo.toObject));
+    }
+
+    function load() {
+        var items = JSON.parse(window.localStorage['repositories'] || '[]');
+        list = items.map(GitHubRepo.fromObject);
+    }
+
+    load();
+
     return repositories;
 })
