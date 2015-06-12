@@ -124,11 +124,43 @@ angular.module('sidewinder-app', ['ionic'])
     return GitHubRepo;
 })
 
-.controller('RepoConfigController', function($scope, repositories) {
+.controller('RepoConfigController', function($scope, $ionicModal, repositories, GitHubRepo) {
     $scope.repositories = repositories;
-    $scope.addRepository = function(){
-        console.log("adding a repo");
+
+    var modalScope = $scope.$new(true);
+    $ionicModal.fromTemplateUrl('edit-repo.html', {
+        scope: modalScope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+        modalScope.cancel = function() {
+            modal.hide();
+        };
+        modalScope.save = function(repo){
+            repositories.add(GitHubRepo(repo.owner, repo.name));
+            modal.hide();
+        }
+    });
+
+    $scope.addRepository = function() {
+        var repo = modalScope.repo = {
+            owner: '',
+            name: '',
+            getURL: function() {
+                if (repo.owner && repo.name) {
+                    return 'https://github.com/' + repo.owner + '/' + repo.name;
+                } else {
+                    return 'https://github.com/{owner}/{repo-name}';
+                }
+            }
+        };
+        $scope.modal.show();
     };
+
+    $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+    });
+
 })
 
 .factory('repositories', function(GitHubRepo) {
