@@ -43,6 +43,9 @@
 
 [ng\:cloak],
 [ng-cloak],
-.ng-cloak {
-    display: none;
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+    display: none !important;
 }

@@ -139,7 +139,8 @@ angular.module('sidewinder-app', ['ionic'])
     var modalScope = $scope.$new(true);
     $ionicModal.fromTemplateUrl('edit-repo.html', {
         scope: modalScope,
-        animation: 'slide-in-up'
+        animation: 'slide-in-up',
+        focusFirstInput: true,
     }).then(function(modal) {
         $scope.modal = modal;
         modalScope.cancel = function() {
