@@ -5,7 +5,7 @@
         </a>
     </ion-nav-buttons>
     <ion-pane>
-        <ion-content ng-cloak>
+        <ion-content ng-cloak ng-controller="StatusController">
             <ion-refresher on-refresh="refresh()"></ion-refresher>
             <div ng-switch="repositories.list.length > 0">
                 <div ng-switch-when="true" class="card assessments" ng-repeat="repo in repositories.list">
