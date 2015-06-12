@@ -49,3 +49,7 @@
 .x-ng-cloak {
     display: none !important;
 }
+
+.item-stacked-label input {
+	font-size: 21px;
+}
