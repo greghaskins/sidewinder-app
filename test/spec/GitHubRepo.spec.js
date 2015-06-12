@@ -52,4 +52,12 @@ describe('GitHubRepo objects', function() {
         expect(repo.displayURL).toBe('https://github.com/sidewinder-team/{repo-name}');
     });
 
+    it('has the default state of "unknown"', function(){
+    	var repo = GitHubRepo.fromObject({
+            owner: 'team-awesome',
+            name: 'project-X'
+        });
+        expect(repo.status.state).toBe('unknown');
+    });
+
 });

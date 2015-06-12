@@ -27,41 +27,28 @@ angular.module('sidewinder-app', ['ionic'])
 })
 
 .controller('StatusController', function($scope, repositories, StatusRefresher) {
-    $scope.repoStatuses = [];
-
-    function rebuildStatuses() {
-        $scope.repoStatuses = repositories.list.map(function(repo) {
-            return {
-                repo: repo,
-                status: {
-                    state: 'unknown',
-                }
-            }
-        });
-        $scope.refresh();
-    }
+    $scope.repositories = repositories
 
     function refreshComplete() {
         $scope.$broadcast('scroll.refreshComplete');
     }
     $scope.refresh = function() {
-        StatusRefresher.refreshAll($scope.repoStatuses).then(refreshComplete, refreshComplete);
+        StatusRefresher.refreshAll(repositories.list).then(refreshComplete, refreshComplete);
     }
 
     $scope.$on('$ionicView.enter', function(event, state) {
         if (state.stateName === 'home') {
-            rebuildStatuses();
+            $scope.refresh();
         }
     });
 
 })
 
 .factory('StatusRefresher', function($q, RepoAssessor) {
-    function refreshOne(repoStatus) {
+    function refreshOne(repository) {
         var defer = $q.defer();
-        var repository = repoStatus.repo;
         RepoAssessor.assess(repository).then(function(assessment) {
-                repoStatus.status = assessment;
+                repository.status = assessment;
                 defer.resolve(assessment);
             },
             function(reason) {
@@ -72,8 +59,8 @@ angular.module('sidewinder-app', ['ionic'])
     }
 
     return {
-        refreshAll: function(repoStatuses) {
-            return Promise.all(repoStatuses.map(refreshOne));
+        refreshAll: function(repositories) {
+            return Promise.all(repositories.map(refreshOne));
         }
     };
 })
@@ -112,6 +99,9 @@ angular.module('sidewinder-app', ['ionic'])
         var repo = {
             owner: repoInfo.owner,
             name: repoInfo.name,
+            status: {
+                state: 'unknown',
+            }
         };
         Object.defineProperty(repo, 'fullName', {
             get: function() {
