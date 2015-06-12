@@ -7,44 +7,46 @@
     <ion-pane>
         <ion-content ng-cloak>
             <ion-refresher on-refresh="refresh()"></ion-refresher>
-            <div class="card assessments" ng-repeat="repo in repositories.list">
-                <div ng-switch="repo.status.state">
-                    <div ng-switch-when="success" class="success item item-text-wrap item-icon-left">
-                        <i class="icon ion-ios-checkmark-empty balanced"></i>
-                        <span class="repo">  
+            <div ng-switch="repositories.list.length > 0">
+                <div ng-switch-when="true" class="card assessments" ng-repeat="repo in repositories.list">
+                    <div ng-switch="repo.status.state">
+                        <div ng-switch-when="success" class="success item item-text-wrap item-icon-left">
+                            <i class="icon ion-ios-checkmark-empty balanced"></i>
+                            <span class="repo">  
                           <span class="owner">{{repo.owner}}</span> /
-                        <span class="name">{{repo.name}}</span>
-                        </span>
-                    </div>
-                    <div ng-switch-when="pending" class="pending item item-text-wrap item-icon-left">
-                        <i class="icon ion-ios-more energized"></i>
-                        <span class="repo">
+                            <span class="name">{{repo.name}}</span>
+                            </span>
+                        </div>
+                        <div ng-switch-when="pending" class="pending item item-text-wrap item-icon-left">
+                            <i class="icon ion-ios-more energized"></i>
+                            <span class="repo">
                           <span class="owner">{{repo.owner}}</span> /
-                        <span class="name">{{repo.name}}</span>
-                        </span>
-                    </div>
-                    <div ng-switch-when="unknown" class="unknown item item-text-wrap item-icon-left">
-                        <i class="icon ion-ios-minus-empty dark"></i>
-                        <span class="repo">
+                            <span class="name">{{repo.name}}</span>
+                            </span>
+                        </div>
+                        <div ng-switch-when="unknown" class="unknown item item-text-wrap item-icon-left">
+                            <i class="icon ion-ios-minus-empty dark"></i>
+                            <span class="repo">
                           <span class="owner">{{repo.owner}}</span> /
-                        <span class="name">{{repo.name}}</span>
-                        </span>
-                    </div>
-                    <div ng-switch-default="" class="failure item item-text-wrap item-icon-left">
-                        <i class="icon ion-ios-close-empty assertive"></i>
-                        <span class="repo">
+                            <span class="name">{{repo.name}}</span>
+                            </span>
+                        </div>
+                        <div ng-switch-default="" class="failure item item-text-wrap item-icon-left">
+                            <i class="icon ion-ios-close-empty assertive"></i>
+                            <span class="repo">
                           <span class="owner">{{repo.owner}}</span> /
-                        <span class="name">{{repo.name}}</span>
-                        </span>
+                            <span class="name">{{repo.name}}</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div ng-cloak ng-show="repositories.list.length < 1" class="card">
-                <div class="item item-divider item-text-wrap">
-                    Status dashboard for GitHub projects
-                </div>
-                <div class="item item-text-wrap">
-                    Use the <a href="#/settings" class="button button-inline button-clear button-positive">Settings</a> page to configure GitHub repositories you want to monitor.
+                <div ng-switch-when="false" class="card">
+                    <div class="item item-divider item-text-wrap">
+                        Status dashboard for GitHub projects
+                    </div>
+                    <div class="item item-text-wrap">
+                        Use the <a href="#/settings" class="button button-inline button-clear button-positive">Settings</a> page to configure GitHub repositories you want to monitor.
+                    </div>
                 </div>
             </div>
         </ion-content>
