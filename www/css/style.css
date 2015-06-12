@@ -27,3 +27,6 @@
 .assessments .repo > span {
 	display: inline-block;
 }
+.item.add-repository .icon {
+	color: #33cd5f;
+}

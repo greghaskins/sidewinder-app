@@ -1,10 +1,14 @@
 <ion-view title="Settings">
     <ion-content>
-        <ion-list ng-controller="RepoConfigController" can-swipe="true">
+        <ion-list ng-controller="RepoConfigController" can-swipe="false" show-delete="true">
             <div class="item item-divider">Repositories</div>
             <ion-item ng-repeat="repo in repositories.list">
                 {{repo.fullName}}
-                <ion-option-button class="button-assertive" ng-click="repositories.remove(repo)">Delete</ion-option-button>
+                <ion-delete-button class="ion-ios-minus" ng-click="repositories.remove(repo)"></ion-delete-button>
+            </ion-item>
+            <ion-item class="add-repository">
+            	<ion-delete-button class="ion-ios-plus" ng-click="addRepository()"></ion-delete-button>
+            	<p class="dark">Add repository</p>
             </ion-item>
         </ion-list>
     </ion-content>

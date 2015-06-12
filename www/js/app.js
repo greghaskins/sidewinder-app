@@ -126,6 +126,9 @@ angular.module('sidewinder-app', ['ionic'])
 
 .controller('RepoConfigController', function($scope, repositories) {
     $scope.repositories = repositories;
+    $scope.addRepository = function(){
+        console.log("adding a repo");
+    };
 })
 
 .factory('repositories', function(GitHubRepo) {
