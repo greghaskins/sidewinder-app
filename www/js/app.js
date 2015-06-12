@@ -118,6 +118,14 @@ angular.module('sidewinder-app', ['ionic'])
                 return repo.owner + '/' + repo.name;
             },
         });
+        Object.defineProperty(repo, 'displayURL', {
+            get: function() {
+                return ('https://github.com/' +
+                    (repo.owner || '{owner}') +
+                    '/' +
+                    (repo.name || '{repo-name}'));
+            }
+        });
         return repo;
     };
 
@@ -154,17 +162,10 @@ angular.module('sidewinder-app', ['ionic'])
     });
 
     $scope.addRepository = function() {
-        var repo = modalScope.repo = {
+        modalScope.repo = GitHubRepo.fromObject({
             owner: '',
-            name: '',
-            getURL: function() {
-                if (repo.owner && repo.name) {
-                    return 'https://github.com/' + repo.owner + '/' + repo.name;
-                } else {
-                    return 'https://github.com/{owner}/{repo-name}';
-                }
-            }
-        };
+            name: ''
+        });
         $scope.modal.show();
     };
 

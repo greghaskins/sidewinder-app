@@ -28,4 +28,28 @@ describe('GitHubRepo objects', function() {
         });
     });
 
+    it('has a display URL for github.com', function() {
+        var repo = GitHubRepo.fromObject({
+            owner: 'team-awesome',
+            name: 'project-X'
+        });
+        expect(repo.displayURL).toBe('https://github.com/team-awesome/project-X');
+    });
+
+    it('has a display URL with a placeholder when owner is blank', function() {
+        var repo = GitHubRepo.fromObject({
+            owner: '',
+            name: 'project-X'
+        });
+        expect(repo.displayURL).toBe('https://github.com/{owner}/project-X');
+    });
+
+    it('has a display URL with a placeholder when owner is blank', function() {
+        var repo = GitHubRepo.fromObject({
+            owner: 'sidewinder-team',
+            name: ''
+        });
+        expect(repo.displayURL).toBe('https://github.com/sidewinder-team/{repo-name}');
+    });
+
 });
