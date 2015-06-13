@@ -1,4 +1,5 @@
-angular.module('sidewinder-app', ['sidewinder.controllers', 'sidewinder.services', 'ionic'])
+var app = angular.module('sidewinder-app', ['sidewinder.controllers', 'sidewinder.services', 'ionic', 'ngCordova']);
+app
     .config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
         $stateProvider
@@ -22,5 +23,20 @@ angular.module('sidewinder-app', ['sidewinder.controllers', 'sidewinder.services
                 StatusBar.styleDefault();
             }
         });
-    })
+    });
+app.run(function ($http, $cordovaPush) {
 
+    var iosConfig = {
+        "badge": true,
+        "sound": true,
+        "alert": true
+    };
+
+    document.addEventListener("deviceready", function () {
+        $cordovaPush.register(iosConfig).then(function (deviceToken) {
+            console.log("deviceToken: " + deviceToken);
+        }, function (err) {
+            alert("Registration error: " + err)
+        });
+    }, false);
+});

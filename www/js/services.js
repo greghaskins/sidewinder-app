@@ -22,7 +22,6 @@ angular.module('sidewinder.services', [])
         return {
             assess: function (repository) {
                 var url = "https://api.github.com/repos/" + repository.fullName + "/commits/master/status";
-
                 var deferred = $q.defer();
                 $http.get(url).success(function (data) {
 
@@ -45,7 +44,6 @@ angular.module('sidewinder.services', [])
             }
         };
     })
-
     .factory('GitHubRepo', function () {
         function fromObject(repoInfo) {
             var repo = {
