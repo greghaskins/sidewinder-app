@@ -19,19 +19,13 @@ describe('the repositories model', function () {
     });
 
     it('can add items and added items are sent to sidewinder-server', function () {
-        var repo = GitHubRepo.fromObject({
-            owner: 'testing',
-            name: 'test'
-        });
+        var repo = new GitHubRepo('testing', 'test');
         repositories.add(repo);
         expect(repositories.list).toContain(repo);
     });
 
     it('adding items while a device token is registered will post to sidewinder-server', function () {
-        var repo = GitHubRepo.fromObject({
-            owner: 'testing',
-            name: 'test'
-        });
+        var repo = new GitHubRepo('testing', 'test');
         var deviceToken = 'abcdef';
         httpBackend.expectPOST(sidewinderServerHost + '/devices/' + deviceToken + '/repositories',
             {name: repo.fullName})
@@ -43,20 +37,14 @@ describe('the repositories model', function () {
     });
 
     it('can remove items', function () {
-        var repo = GitHubRepo.fromObject({
-            owner: 'testing',
-            name: 'toRemove'
-        });
+        var repo = new GitHubRepo('testing', 'toRemove');
         repositories.add(repo);
         repositories.remove(repo);
         expect(repositories.list).not.toContain(repo);
     });
 
     it('doesn\'t explode when removing non-existing items', function () {
-        repositories.remove(GitHubRepo.fromObject({
-            owner: 'does-not',
-            name: 'exist'
-        }));
+        repositories.remove(new GitHubRepo('does-not', 'exist'));
     })
 
 });

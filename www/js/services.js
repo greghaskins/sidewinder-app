@@ -74,40 +74,32 @@ angular.module('sidewinder.services', [])
         };
     })
     .factory('GitHubRepo', function () {
-        function fromObject(repoInfo) {
-            var repo = {
-                owner: repoInfo.owner,
-                name: repoInfo.name,
-                status: {
-                    state: 'unknown'
-                }
+        return function (owner, name) {
+            this.owner = owner;
+            this.name = name;
+            this.status = {
+                state: 'unknown'
             };
-            Object.defineProperty(repo, 'fullName', {
+
+            Object.defineProperty(this, 'fullName', {
                 get: function () {
-                    return repo.owner + '/' + repo.name;
+                    return this.owner + '/' + this.name;
                 }
             });
-            Object.defineProperty(repo, 'displayURL', {
+            Object.defineProperty(this, 'displayURL', {
                 get: function () {
                     return ('https://github.com/' +
-                    (repo.owner || '{owner}') +
+                    (this.owner || '{owner}') +
                     '/' +
-                    (repo.name || '{repo-name}'));
+                    (this.name || '{repo-name}'));
                 }
             });
-            return repo;
-        }
-
-        function toObject(gitHubRepo) {
-            return {
-                owner: gitHubRepo.owner,
-                name: gitHubRepo.name
-            };
-        }
-
-        return {
-            fromObject: fromObject,
-            toObject: toObject
+            this.toObject = function () {
+                return {
+                    owner: this.owner,
+                    name: this.name
+                };
+            }
         };
     })
     .factory('repositories', function (GitHubRepo, SidewinderServer) {
@@ -132,12 +124,16 @@ angular.module('sidewinder.services', [])
         });
 
         function persistLocally() {
-            window.localStorage['repositories'] = JSON.stringify(list.map(GitHubRepo.toObject));
+            window.localStorage['repositories'] = JSON.stringify(list.map(function (repo) {
+                return repo.toObject();
+            }));
         }
 
         function load() {
             var items = JSON.parse(window.localStorage['repositories'] || '[]');
-            list = items.map(GitHubRepo.fromObject);
+            list = items.map(function (object) {
+                return new GitHubRepo(object.owner, object.name);
+            });
         }
 
         load();

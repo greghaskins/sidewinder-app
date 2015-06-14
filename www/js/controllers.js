@@ -23,23 +23,20 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
         $ionicModal.fromTemplateUrl('edit-repo.html', {
             scope: modalScope,
             animation: 'slide-in-up',
-            focusFirstInput: true,
+            focusFirstInput: true
         }).then(function (modal) {
             $scope.modal = modal;
             modalScope.cancel = function () {
                 modal.hide();
             };
             modalScope.save = function (repo) {
-                repositories.add(GitHubRepo.fromObject(repo));
+                repositories.add(new GitHubRepo(repo.owner, repo.name));
                 modal.hide();
             }
         });
 
         $scope.addRepository = function () {
-            modalScope.repo = GitHubRepo.fromObject({
-                owner: '',
-                name: ''
-            });
+            modalScope.repo = new GitHubRepo('', '');
             $scope.modal.show();
         };
 
