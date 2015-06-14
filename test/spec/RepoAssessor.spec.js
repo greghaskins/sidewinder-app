@@ -15,7 +15,7 @@ describe('the RepoAssessor', function() {
     it('gets the repository state from GitHub combined status API', function(done) {
         $httpBackend.whenGET('https://api.github.com/repos/sidewinder-team/sidewinder-server/commits/master/status')
             .respond(200, {
-                state: 'success',
+                state: 'success'
             });
 
         var repo = GitHubRepo.fromObject({

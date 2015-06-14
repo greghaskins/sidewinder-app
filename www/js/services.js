@@ -1,4 +1,20 @@
+var sidewinderServerHost = "http://sidewinder-server-a5b2d643.robertfmurdock.svc.tutum.io:5103";
+
 angular.module('sidewinder.services', [])
+    .service('sidewinderServer', function ($q, $http) {
+        var server = this;
+        server.addRepository = function (deviceToken, repo) {
+            var url = sidewinderServerHost + "/devices/" + deviceToken + "/repositories";
+            return $q(function (resolve, reject) {
+                $http.post(url, {name: repo.fullName}).then(function () {
+                    resolve(repo);
+                }).catch(function () {
+                    reject("Failed to add repo to server.");
+                })
+             });
+        };
+        return server;
+    })
     .factory('StatusRefresher', function ($q, RepoAssessor) {
         function refreshOne(repository) {
             var defer = $q.defer();
@@ -12,6 +28,7 @@ angular.module('sidewinder.services', [])
                 });
             return defer.promise;
         }
+
         return {
             refreshAll: function (repositories) {
                 return $q.all(repositories.map(refreshOne));
@@ -21,26 +38,19 @@ angular.module('sidewinder.services', [])
     .factory('RepoAssessor', function ($http, $q) {
         return {
             assess: function (repository) {
-                var url = "https://api.github.com/repos/" + repository.fullName + "/commits/master/status";
-                var deferred = $q.defer();
-                $http.get(url).success(function (data) {
-
-                    var state = data.state;
-                    if (state === 'pending' && data.statuses.length < 1) {
-                        state = 'unknown';
-                    }
-                    deferred.resolve({
-                        state: state
-                    });
-
-                }).error(function () {
-                    deferred.resolve({
-                        state: 'unknown'
-                    });
-
-                });
-
-                return deferred.promise;
+                return $q(function (resolve) {
+                    var url = "https://api.github.com/repos/" + repository.fullName + "/commits/master/status";
+                    $http.get(url)
+                        .success(function (data) {
+                            var state = data.state;
+                            if (state === 'pending' && data.statuses.length < 1) {
+                                state = 'unknown';
+                            }
+                            resolve({state: state});
+                        }).error(function () {
+                            resolve({state: 'unknown'});
+                        })
+                })
             }
         };
     })
@@ -81,18 +91,20 @@ angular.module('sidewinder.services', [])
             toObject: toObject
         };
     })
-
-    .factory('repositories', function (GitHubRepo) {
+    .factory('repositories', function (GitHubRepo, sidewinderServer) {
         var repositories = {};
         var list = [];
         repositories.add = function (repo) {
             list.push(repo);
-            persist();
+            persistLocally();
+            if (repositories.deviceToken) {
+                sidewinderServer.addRepository(repositories.deviceToken, repo);
+            }
         };
         repositories.remove = function (repo) {
             var index = list.indexOf(repo);
             list.splice(index, 1);
-            persist();
+            persistLocally();
         };
         Object.defineProperty(repositories, 'list', {
             get: function () {
@@ -100,7 +112,7 @@ angular.module('sidewinder.services', [])
             }
         });
 
-        function persist() {
+        function persistLocally() {
             window.localStorage['repositories'] = JSON.stringify(list.map(GitHubRepo.toObject));
         }
 
