@@ -75,7 +75,56 @@ describe('the RepoAssessor', function() {
         }).finally(done);
 
         $httpBackend.flush();
+    });
 
+    it('includes state, description, and url for each status', function(done) {
+        $httpBackend.whenGET('https://api.github.com/repos/sidewinder-team/sidewinder-app/commits/master/status')
+            .respond(200, {
+                state: 'success',
+                statuses: [{
+                    "url": "https://api.github.com/repos/sidewinder-team/sidewinder-app/statuses/90a1afaaefb38642784b3a89eab2a7dc459c5d79",
+                    "id": 241039215,
+                    "state": "failure",
+                    "description": "Your tests failed",
+                    "target_url": "https://circleci.com/gh/sidewinder-team/sidewinder-app/2",
+                    "context": "ci/circleci",
+                    "created_at": "2015-06-14T13:17:56Z",
+                    "updated_at": "2015-06-14T13:17:56Z"
+                }, {
+                    "url": "https://api.github.com/repos/sidewinder-team/sidewinder-app/statuses/90a1afaaefb38642784b3a89eab2a7dc459c5d79",
+                    "id": 241040339,
+                    "state": "success",
+                    "description": "The Travis CI build passed",
+                    "target_url": "https://travis-ci.org/sidewinder-team/sidewinder-app/builds/66745547",
+                    "context": "continuous-integration/travis-ci/push",
+                    "created_at": "2015-06-14T13:25:40Z",
+                    "updated_at": "2015-06-14T13:25:40Z"
+                }],
+            });
+
+        var repo = GitHubRepo.fromObject({
+            owner: 'sidewinder-team',
+            name: 'sidewinder-app'
+        });
+
+        RepoAssessor.assess(repo).then(function(result) {
+            expect(result.statuses.length).toBe(2);
+
+            expect(result.statuses[0].state).toBe('failure');
+            expect(result.statuses[0].message).toBe('Your tests failed');
+            expect(result.statuses[0].href).toBe('https://circleci.com/gh/sidewinder-team/sidewinder-app/2');
+            expect(result.statuses[0].context).toBe('ci/circleci');
+
+            expect(result.statuses[1].state).toBe('success');
+            expect(result.statuses[1].message).toBe('The Travis CI build passed');
+            expect(result.statuses[1].href).toBe('https://travis-ci.org/sidewinder-team/sidewinder-app/builds/66745547');
+            expect(result.statuses[1].context).toBe('continuous-integration/travis-ci/push');
+
+        }).catch(function(error) {
+            expect(error).toBeUndefined();
+        }).finally(done);
+
+        $httpBackend.flush();
 
     });
 

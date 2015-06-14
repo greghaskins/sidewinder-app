@@ -1,6 +1,6 @@
 var app = angular.module('sidewinder-app', ['sidewinder.controllers', 'sidewinder.services', 'ionic', 'ngCordova']);
 app
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
         $stateProvider
             .state('home', {
@@ -12,8 +12,14 @@ app
                 templateUrl: 'settings.html'
             });
     })
-    .run(function ($ionicPlatform) {
-        $ionicPlatform.ready(function () {
+    .run(function($ionicPlatform, $cordovaPush) {
+        var iosPushConfig = {
+            "badge": true,
+            "sound": true,
+            "alert": true
+        };
+
+        $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
             if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -22,21 +28,11 @@ app
             if (window.StatusBar) {
                 StatusBar.styleDefault();
             }
+
+            $cordovaPush.register(iosPushConfig).then(function(deviceToken) {
+                console.log("deviceToken: " + deviceToken);
+            }, function(err) {
+                alert("Registration error: " + err)
+            });
         });
     });
-app.run(function ($http, $cordovaPush) {
-
-    var iosConfig = {
-        "badge": true,
-        "sound": true,
-        "alert": true
-    };
-
-    document.addEventListener("deviceready", function () {
-        $cordovaPush.register(iosConfig).then(function (deviceToken) {
-            console.log("deviceToken: " + deviceToken);
-        }, function (err) {
-            alert("Registration error: " + err)
-        });
-    }, false);
-});

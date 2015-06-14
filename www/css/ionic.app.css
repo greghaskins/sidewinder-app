@@ -7675,25 +7675,19 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
-.assessments .item > .icon {
+.assessments header .icon {
   left: 3px; }
-
-.assessments .item-icon-left {
+.assessments header .item-icon-left {
   padding-left: 38px; }
-
-.assessments .item {
+.assessments .assessment.card {
   border-left: 8px solid #444; }
-
-.assessments .item.success {
+.assessments .card.success {
   border-left-color: #33cd5f; }
-
-.assessments .item.failure {
+.assessments .card.failure, .assessments .failure header {
   border-left-color: #ef473a; }
-
-.assessments .item.pending {
+.assessments .card.pending {
   border-left-color: #ffc900; }
-
-.assessments .repo > span {
+.assessments header span {
   display: inline-block; }
 
 .item.add-repository .icon {

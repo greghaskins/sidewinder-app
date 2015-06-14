@@ -17,36 +17,30 @@ $dark:                            #444 !default;
 
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
-
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-
-.assessments .item > .icon {
-    left: 3px;
-}
-
-.assessments .item-icon-left {
-    padding-left: 38px;
-}
-
-.assessments .item {
-    border-left: 8px solid #444;
-}
-
-.assessments .item.success {
-    border-left-color: $balanced;
-}
-
-.assessments .item.failure {
-    border-left-color: $assertive;
-}
-
-.assessments .item.pending {
-    border-left-color: $energized;
-}
-
-.assessments .repo > span {
-    display: inline-block;
+.assessments {
+    header .icon {
+        left: 3px;
+    }
+    header .item-icon-left {
+        padding-left: 38px;
+    }
+    .assessment.card {
+        border-left: 8px solid #444;
+    }
+    .card.success {
+        border-left-color: $balanced;
+    }
+    .card.failure, .failure header {
+        border-left-color: $assertive;
+    }
+    .card.pending {
+        border-left-color: $energized;
+    }
+    header span {
+        display: inline-block;
+    }
 }
 
 .item.add-repository .icon {
@@ -72,5 +66,5 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .item-stacked-label input {
-	font-size: 21px;
+    font-size: 21px;
 }

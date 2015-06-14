@@ -7,36 +7,44 @@
     <ion-pane>
         <ion-content ng-cloak ng-controller="StatusController">
             <ion-refresher on-refresh="refresh()"></ion-refresher>
-            <div ng-switch="repositories.list.length > 0">
-                <div ng-switch-when="true" class="card assessments" ng-repeat="repo in repositories.list">
+            <div ng-switch="repositories.list.length > 0" class="assessments">
+                <div ng-switch-when="true" class="card assessment {{repo.status.state}}" ng-repeat="repo in repositories.list">
                     <div ng-switch="repo.status.state">
-                        <div ng-switch-when="success" class="success item item-text-wrap item-icon-left">
+                        <header ng-switch-when="success" class="success item item-text-wrap item-icon-left">
                             <i class="icon ion-ios-checkmark-empty balanced"></i>
                             <span class="repo">  
                           <span class="owner">{{repo.owner}}</span> /
                             <span class="name">{{repo.name}}</span>
                             </span>
-                        </div>
-                        <div ng-switch-when="pending" class="pending item item-text-wrap item-icon-left">
+                        </header>
+                        <header ng-switch-when="pending" class="pending item item-text-wrap item-icon-left">
                             <i class="icon ion-ios-more energized"></i>
                             <span class="repo">
                           <span class="owner">{{repo.owner}}</span> /
                             <span class="name">{{repo.name}}</span>
                             </span>
-                        </div>
-                        <div ng-switch-when="unknown" class="unknown item item-text-wrap item-icon-left">
+                        </header>
+                        <header ng-switch-default="unknown" class="unknown item item-text-wrap item-icon-left">
                             <i class="icon ion-ios-minus-empty dark"></i>
                             <span class="repo">
                           <span class="owner">{{repo.owner}}</span> /
                             <span class="name">{{repo.name}}</span>
                             </span>
-                        </div>
-                        <div ng-switch-default="" class="failure item item-text-wrap item-icon-left">
-                            <i class="icon ion-ios-close-empty assertive"></i>
-                            <span class="repo">
-                          <span class="owner">{{repo.owner}}</span> /
-                            <span class="name">{{repo.name}}</span>
-                            </span>
+                        </header>
+                        <div ng-switch-when="failure" class="failure">
+                            <header class="item item-text-wrap item-icon-left">
+                                <i class="icon ion-ios-close-empty assertive"></i>
+                                <span class="repo">
+                                    <span class="owner">{{repo.owner}}</span> /
+                                <span class="name">{{repo.name}}</span>
+                                </span>
+                            </header>
+                            <div class="item">
+                                <p ng-repeat="status in repo.status.statuses">
+                                    <span>{{status.message}}</span>
+                                    <span class="item-note">{{status.context}} <img src="https://www.google.com/s2/favicons?domain_url={{status.href}}"></span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
