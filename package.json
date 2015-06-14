@@ -35,7 +35,7 @@
     "ios"
   ],
   "scripts": {
-    "postinstall": "npm install -g ionic cordova ios-sim ios-deploy",
+    "postinstall": "npm install -g ionic cordova ios-sim ios-deploy bower",
     "prestart": "npm install",
     "start": "ionic serve --lab",
     "pretest": "npm install",

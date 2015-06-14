@@ -1,0 +1,15 @@
+{
+  "name": "PushPlugin",
+  "homepage": "https://github.com/phonegap-build/PushPlugin",
+  "version": "2.4.0",
+  "_release": "2.4.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.4.0",
+    "commit": "26b8581012c1bdb3a5cbfb1642ae43690226bbd1"
+  },
+  "_source": "https://github.com/phonegap-build/PushPlugin.git",
+  "_target": "~2.4.0",
+  "_originalSource": "https://github.com/phonegap-build/PushPlugin.git",
+  "_direct": true
+}
