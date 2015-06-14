@@ -1,0 +1,9 @@
+machine:
+  xcode:
+    version: "6.3.1"
+test:
+  pre:
+    - brew update
+    - npm install
+  override:
+    - npm test
