@@ -21,3 +21,56 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+.assessments .item > .icon {
+    left: 3px;
+}
+
+.assessments .item-icon-left {
+    padding-left: 38px;
+}
+
+.assessments .item {
+    border-left: 8px solid #444;
+}
+
+.assessments .item.success {
+    border-left-color: $balanced;
+}
+
+.assessments .item.failure {
+    border-left-color: $assertive;
+}
+
+.assessments .item.pending {
+    border-left-color: $energized;
+}
+
+.assessments .repo > span {
+    display: inline-block;
+}
+
+.item.add-repository .icon {
+    color: $balanced;
+}
+
+.button-inline {
+    max-height: auto;
+    min-height: auto;
+    line-height: 1;
+    vertical-align: baseline;
+    min-height: 0;
+    max-height: auto;
+}
+
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+    display: none !important;
+}
+
+.item-stacked-label input {
+	font-size: 21px;
+}

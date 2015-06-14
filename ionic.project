@@ -1,4 +1,12 @@
 {
   "name": "Sidewinder",
-  "app_id": "d88b169f"
+  "app_id": "d88b169f",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
 }
