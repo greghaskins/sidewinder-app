@@ -1,8 +1,18 @@
 var sidewinderServerHost = "http://sidewinder-server-a5b2d643.robertfmurdock.svc.tutum.io:5103";
 
 angular.module('sidewinder.services', [])
-    .service('sidewinderServer', function ($q, $http) {
+    .service('SidewinderServer', function ($q, $http) {
         var server = this;
+        server.registerDevice = function (deviceToken) {
+            var url = sidewinderServerHost + "/devices";
+            return $q(function (resolve, reject) {
+                $http.post(url, {deviceId: deviceToken}).then(function () {
+                    resolve(deviceToken);
+                }).catch(function () {
+                    reject("Failed to register device.");
+                })
+            });
+        };
         server.addRepository = function (deviceToken, repo) {
             var url = sidewinderServerHost + "/devices/" + deviceToken + "/repositories";
             return $q(function (resolve, reject) {
@@ -11,7 +21,7 @@ angular.module('sidewinder.services', [])
                 }).catch(function () {
                     reject("Failed to add repo to server.");
                 })
-             });
+            });
         };
         return server;
     })
@@ -91,14 +101,14 @@ angular.module('sidewinder.services', [])
             toObject: toObject
         };
     })
-    .factory('repositories', function (GitHubRepo, sidewinderServer) {
+    .factory('repositories', function (GitHubRepo, SidewinderServer) {
         var repositories = {};
         var list = [];
         repositories.add = function (repo) {
             list.push(repo);
             persistLocally();
             if (repositories.deviceToken) {
-                sidewinderServer.addRepository(repositories.deviceToken, repo);
+                SidewinderServer.addRepository(repositories.deviceToken, repo);
             }
         };
         repositories.remove = function (repo) {
