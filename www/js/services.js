@@ -13,6 +13,16 @@ angular.module('sidewinder.services', [])
                 })
             });
         };
+        server.unregisterDevice = function (deviceToken) {
+            var url = sidewinderServerHost + "/devices/" + deviceToken;
+            return $q(function (resolve, reject) {
+                $http.delete(url).then(function () {
+                    resolve(deviceToken);
+                }).catch(function () {
+                    reject("Failed to unregister device.");
+                })
+            });
+        };
         server.addRepository = function (deviceToken, repo) {
             var url = sidewinderServerHost + "/devices/" + deviceToken + "/repositories";
             return $q(function (resolve, reject) {
@@ -23,7 +33,6 @@ angular.module('sidewinder.services', [])
                 })
             });
         };
-        return server;
     })
     .factory('StatusRefresher', function ($q, RepoAssessor) {
         function refreshOne(repository) {
