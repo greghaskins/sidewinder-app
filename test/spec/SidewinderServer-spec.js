@@ -94,16 +94,19 @@ describe('SidewinderServer', function () {
     });
 
     describe('list repositories', function(){
-        it('will get the info rom the server and return GitHubRepos', function (done) {
+        it('will get the info from the server and return GitHubRepos', function (done) {
             inject(function ($httpBackend, GitHubRepo, SidewinderServer) {
                 var repo = new GitHubRepo('Tim', 'Veggiesaurus');
                 var deviceToken = 'lol3irfdsd';
-                $httpBackend.expectPOST(sidewinderServerHost + '/devices/' + deviceToken + '/repositories',
-                    {name: repo.fullName})
-                    .respond(404);
-                SidewinderServer.addRepository(deviceToken, repo)
-                    .catch(function (result) {
-                        expect(result).toBe("Failed to add repo to server.");
+                $httpBackend.expectGET(sidewinderServerHost + '/devices/' + deviceToken + '/repositories')
+                    .respond(200, [{name: 'things/thing1'}, {name: 'things/thing2'}]);
+                SidewinderServer.listRepositories(deviceToken)
+                    .then(function (result) {
+                        expect(result.length).toBe(2);
+                        expect(result[0].owner).toBe('things');
+                        expect(result[0].name).toBe('thing1');
+                        expect(result[1].owner).toBe('things');
+                        expect(result[1].name).toBe('thing2');
                     }).finally(done);
                 $httpBackend.flush();
             })

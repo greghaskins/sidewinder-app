@@ -1,7 +1,7 @@
 var sidewinderServerHost = "http://sidewinder-server-a5b2d643.robertfmurdock.svc.tutum.io:5103";
 
-angular.module('sidewinder.services', [])
-    .service('SidewinderServer', function ($q, $http) {
+angular.module('sidewinder.services', ['ngLodash'])
+    .service('SidewinderServer', function ($q, $http, GitHubRepo, lodash) {
         var server = this;
         server.registerDevice = function (deviceToken) {
             var url = sidewinderServerHost + "/devices";
@@ -33,6 +33,21 @@ angular.module('sidewinder.services', [])
                 })
             });
         };
+
+        server.listRepositories = function (deviceToken) {
+            return $q(function (resolve, reject) {
+                var url = sidewinderServerHost + "/devices/" + deviceToken + "/repositories";
+                $http.get(url)
+                    .then(function (response) {
+                        resolve(lodash.map(response.data, function(repositoryEntry){
+                            var elements = repositoryEntry.name.split('/');
+                            return new GitHubRepo(elements[0], elements[1]);
+                        }));
+                    }).catch(function () {
+                        reject("Failed to add repo to server.");
+                    })
+            })
+        }
     })
     .factory('StatusRefresher', function ($q, RepoAssessor) {
         function refreshOne(repository) {
@@ -75,7 +90,6 @@ angular.module('sidewinder.services', [])
                         resolve({state: state, statuses: statuses});
                     }).error(function () {
                         resolve({state: 'unknown'});
-
                     });
                 });
             }
@@ -83,29 +97,29 @@ angular.module('sidewinder.services', [])
     })
     .factory('GitHubRepo', function () {
         return function (owner, name) {
-            this.owner = owner;
-            this.name = name;
-            this.status = {
+            var repo = this;
+            repo.owner = owner;
+            repo.name = name;
+            repo.status = {
                 state: 'unknown'
             };
-
-            Object.defineProperty(this, 'fullName', {
+            Object.defineProperty(repo, 'fullName', {
                 get: function () {
-                    return this.owner + '/' + this.name;
+                    return repo.owner + '/' + repo.name;
                 }
             });
-            Object.defineProperty(this, 'displayURL', {
+            Object.defineProperty(repo, 'displayURL', {
                 get: function () {
                     return ('https://github.com/' +
-                    (this.owner || '{owner}') +
+                    (repo.owner || '{owner}') +
                     '/' +
-                    (this.name || '{repo-name}'));
+                    (repo.name || '{repo-name}'));
                 }
             });
-            this.toObject = function () {
+            repo.toObject = function () {
                 return {
-                    owner: this.owner,
-                    name: this.name
+                    owner: repo.owner,
+                    name: repo.name
                 };
             }
         };

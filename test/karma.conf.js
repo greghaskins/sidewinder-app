@@ -17,6 +17,8 @@ module.exports = function(config) {
         files: [
             'www/lib/ionic/js/ionic.bundle.js',
             'www/lib/ngCordova/dist/ng-cordova.js',
+            'www/lib/ng-lodash/build/ng-lodash.min.js',
+            'www/lib/lodash/lodash.min.js',
             'test/stubs.js',
             'www/js/**/*.js',
             'node_modules/angular-mocks/angular-mocks.js',
