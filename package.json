@@ -40,7 +40,7 @@
     "ios"
   ],
   "scripts": {
-    "postinstall": "npm install -g ionic cordova ios-sim ios-deploy bower",
+    "postinstall": "npm install -g ionic cordova ios-sim ios-deploy bower gulp",
     "start": "ionic serve --lab",
     "test": "npm run karma:headless",
     "tdd": "npm run karma:watch",
