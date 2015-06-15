@@ -7,3 +7,4 @@ platforms/
 plugins/
 
 *.log
+.idea/workspace.xml
