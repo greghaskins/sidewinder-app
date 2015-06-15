@@ -8,7 +8,7 @@
         <ion-content ng-cloak ng-controller="StatusController">
             <ion-refresher on-refresh="refresh()"></ion-refresher>
             <div ng-switch="repositories.list.length > 0" class="assessments">
-                <div ng-switch-when="true" class="card assessment {{repo.status.state}}" ng-repeat="repo in repositories.list">
+                <div ng-switch-when="true" class="card assessment {{repo.status.state}}" ng-repeat="repo in repositories.list | orderBy:troubleOnTop">
                     <div ng-switch="repo.status.state">
                         <header ng-switch-when="success" class="success item item-text-wrap item-icon-left">
                             <i class="icon ion-ios-checkmark-empty balanced"></i>

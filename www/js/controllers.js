@@ -15,6 +15,17 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
                 $scope.refresh();
             }
         });
+
+        var precedence = {
+            'failure': 0,
+            'pending': 1,
+            'unknown': 2,
+            'success': 3
+        }
+
+        $scope.troubleOnTop = function(repo){
+            return precedence[repo.status.state] + '--' + repo.fullName;
+        }
     })
     .controller('RepoConfigController', function ($scope, $ionicModal, $ionicActionSheet, repositories, GitHubRepo) {
         $scope.repositories = repositories;
