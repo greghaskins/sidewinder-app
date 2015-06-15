@@ -16,7 +16,7 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
             }
         });
     })
-    .controller('RepoConfigController', function ($scope, $ionicModal, repositories, GitHubRepo) {
+    .controller('RepoConfigController', function ($scope, $ionicModal, $ionicActionSheet, repositories, GitHubRepo) {
         $scope.repositories = repositories;
 
         var modalScope = $scope.$new(true);
@@ -43,4 +43,16 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
         $scope.$on('$destroy', function () {
             $scope.modal.remove();
         });
+
+        $scope.removeRepo = function(repo){
+            var hideSheet = $ionicActionSheet.show({
+                titleText: 'Remove <b>' + repo.fullName + '</b>?',
+                destructiveText: 'Remove',
+                destructiveButtonClicked: function(){
+                    repositories.remove(repo);
+                    hideSheet();
+                },
+                cancelText: 'Cancel'
+            });
+        }
     });

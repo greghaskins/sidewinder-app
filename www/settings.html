@@ -4,7 +4,7 @@
             <div class="item item-divider">Repositories</div>
             <ion-item ng-repeat="repo in repositories.list">
                 {{repo.fullName}}
-                <ion-delete-button class="ion-ios-minus" ng-click="repositories.remove(repo)"></ion-delete-button>
+                <ion-delete-button class="ion-ios-minus" ng-click="removeRepo(repo)"></ion-delete-button>
             </ion-item>
             <ion-item class="add-repository enable-pointer-events" ng-click="addRepository()">
                 <ion-delete-button class="ion-ios-plus"></ion-delete-button>
