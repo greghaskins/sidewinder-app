@@ -177,7 +177,11 @@ angular.module('sidewinder.services', ['ngLodash'])
             return $q(function(resolve, reject) {
                 $ionicPlatform.ready(function() {
                     var push = $window.PushNotification.init({
-                        ios: {}
+                        ios: {
+                            badge: true,
+                            sound: true,
+                            alert: true
+                        }
                     });
                     var unregister = $q(function(reject, resolve) {
                         push.unregister(function() {
@@ -186,9 +190,15 @@ angular.module('sidewinder.services', ['ngLodash'])
                             reject(error);
                         });
                     });
+                    var addHandler = function(callback){
+                        push.on('notification', callback);
+                    };
+                    push.on('error', function(err){
+                        console.log("push error: " + err);
+                    });
                     push.on('registration', function(data) {
                         resolve({
-                            on: push.on,
+                            addHandler: addHandler,
                             deviceToken: data.registrationId,
                             unregister: unregister
                         });

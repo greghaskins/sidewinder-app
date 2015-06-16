@@ -1,16 +1,23 @@
 angular.module('sidewinder.controllers', ['sidewinder.services'])
-    .controller('StatusController', function ($scope, repositories, StatusRefresher) {
+    .controller('StatusController', function($scope, repositories, StatusRefresher, PushService) {
         $scope.repositories = repositories;
 
         function refreshComplete() {
             $scope.$broadcast('scroll.refreshComplete');
         }
 
-        $scope.refresh = function () {
+        $scope.refresh = function() {
+            console.log('Refreshing...');
             StatusRefresher.refreshAll(repositories.list).then(refreshComplete, refreshComplete);
         };
 
         $scope.$on('$ionicView.beforeEnter', $scope.refresh);
+        PushService.init().then(function(push) {
+            push.addHandler(function(data) {
+                console.log('Received push notification: ' + JSON.stringify(data));
+                $scope.refresh();
+            });
+        });
 
         var precedence = {
             'failure': 0,
@@ -19,11 +26,11 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
             'success': 3
         }
 
-        $scope.troubleOnTop = function(repo){
+        $scope.troubleOnTop = function(repo) {
             return precedence[repo.status.state] + '--' + repo.fullName;
         }
     })
-    .controller('RepoConfigController', function ($scope, $ionicModal, $ionicActionSheet, repositories, GitHubRepo) {
+    .controller('RepoConfigController', function($scope, $ionicModal, $ionicActionSheet, repositories, GitHubRepo) {
         $scope.repositories = repositories;
 
         var modalScope = $scope.$new(true);
@@ -31,31 +38,31 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
             scope: modalScope,
             animation: 'slide-in-up',
             focusFirstInput: true
-        }).then(function (modal) {
+        }).then(function(modal) {
             $scope.modal = modal;
-            modalScope.cancel = function () {
+            modalScope.cancel = function() {
                 modal.hide();
             };
-            modalScope.save = function (repo) {
+            modalScope.save = function(repo) {
                 repositories.add(new GitHubRepo(repo.owner, repo.name));
                 modal.hide();
             }
         });
 
-        $scope.addRepository = function () {
+        $scope.addRepository = function() {
             modalScope.repo = new GitHubRepo('', '');
             $scope.modal.show();
         };
 
-        $scope.$on('$destroy', function () {
+        $scope.$on('$destroy', function() {
             $scope.modal.remove();
         });
 
-        $scope.removeRepo = function(repo){
+        $scope.removeRepo = function(repo) {
             var hideSheet = $ionicActionSheet.show({
                 titleText: 'Remove <b>' + repo.fullName + '</b>?',
                 destructiveText: 'Remove',
-                destructiveButtonClicked: function(){
+                destructiveButtonClicked: function() {
                     repositories.remove(repo);
                     hideSheet();
                 },
