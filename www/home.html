@@ -1,11 +1,11 @@
-<ion-view view-title="Sidewinder" ng-cloak>
+<ion-view view-title="Sidewinder" ng-cloak ng-controller="StatusController">
     <ion-nav-buttons side="secondary">
         <a href="#/settings" class="button button-clear">
             <i class="icon ion-ios-gear-outline"></i>
         </a>
     </ion-nav-buttons>
     <ion-pane>
-        <ion-content ng-cloak ng-controller="StatusController">
+        <ion-content ng-cloak>
             <ion-refresher on-refresh="refresh()"></ion-refresher>
             <div ng-switch="repositories.list.length > 0" class="assessments">
                 <div ng-switch-when="true" class="card assessment {{repo.status.state}}" ng-repeat="repo in repositories.list | orderBy:troubleOnTop">

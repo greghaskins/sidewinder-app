@@ -10,11 +10,7 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
             StatusRefresher.refreshAll(repositories.list).then(refreshComplete, refreshComplete);
         };
 
-        $scope.$on('$ionicView.enter', function (event, state) {
-            if (state.stateName === 'home') {
-                $scope.refresh();
-            }
-        });
+        $scope.$on('$ionicView.beforeEnter', $scope.refresh);
 
         var precedence = {
             'failure': 0,
