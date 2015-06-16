@@ -84,7 +84,8 @@ angular.module('sidewinder.services', ['ngLodash'])
                                 state: status.state,
                                 message: status.description,
                                 href: status.target_url,
-                                context: status.context
+                                context: status.context,
+                                timestamp: status.updated_at
                             };
                         });
                         resolve({state: state, statuses: statuses});

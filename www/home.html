@@ -42,6 +42,7 @@
                             <div class="item">
                                 <p ng-repeat="status in repo.status.statuses">
                                     <span>{{status.message}}</span>
+                                    <br>{{status.timestamp | timeAgo}}
                                     <span class="item-note">{{status.context}} <img src="https://www.google.com/s2/favicons?domain_url={{status.href}}"></span>
                                 </p>
                             </div>

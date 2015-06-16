@@ -7689,6 +7689,18 @@ a.button {
   border-left-color: #ffc900; }
 .assessments header span {
   display: inline-block; }
+.assessments .details li {
+  padding-left: 15px;
+  clear: both; }
+.assessments .details li::before {
+  font-family: 'Ionicons';
+  margin: 0 0 0 -15px;
+  content: '\f462';
+  float: left; }
+.assessments .details li.failure::before {
+  content: '\f404'; }
+.assessments .details li.success::before {
+  content: '\f3fd'; }
 
 .item.add-repository .icon {
   color: #33cd5f; }

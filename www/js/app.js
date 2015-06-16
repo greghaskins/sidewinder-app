@@ -1,4 +1,4 @@
-var app = angular.module('sidewinder-app', ['sidewinder.controllers', 'sidewinder.services', 'ionic', 'ngCordova']);
+var app = angular.module('sidewinder-app', ['sidewinder.controllers', 'sidewinder.services', 'ionic', 'ngCordova', 'yaru22.angular-timeago']);
 app
     .config(function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');

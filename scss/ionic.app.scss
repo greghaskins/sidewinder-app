@@ -41,6 +41,29 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     header span {
         display: inline-block;
     }
+
+    .details {
+
+        li {
+            padding-left: 15px;
+            clear: both;
+        }
+
+        li::before {
+            font-family: 'Ionicons';
+            margin: 0 0 0 -15px;
+            content: '\f462';
+            float: left;
+        }
+
+        li.failure::before {
+            content: '\f404';
+        }
+
+        li.success::before {
+            content: '\f3fd';
+        }
+    }
 }
 
 .item.add-repository .icon {
