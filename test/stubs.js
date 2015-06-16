@@ -1,5 +1,8 @@
-window.plugins = window.plugins || {};
-
-window.plugins.pushNotification = {
-    register: function() {},
+window.PushNotification = {
+    init: function() {
+        return {
+            on: function() {},
+            unregister: function() {}
+        }
+    }
 }

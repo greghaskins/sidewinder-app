@@ -1,62 +1,66 @@
 var sidewinderServerHost = "http://sidewinder-server-a5b2d643.robertfmurdock.svc.tutum.io:5103";
 
 angular.module('sidewinder.services', ['ngLodash'])
-    .service('SidewinderServer', function ($q, $http, GitHubRepo, lodash) {
+    .service('SidewinderServer', function($q, $http, GitHubRepo, lodash) {
         var server = this;
-        server.registerDevice = function (deviceToken) {
+        server.registerDevice = function(deviceToken) {
             var url = sidewinderServerHost + "/devices";
-            return $q(function (resolve, reject) {
-                $http.post(url, {deviceId: deviceToken}).then(function () {
+            return $q(function(resolve, reject) {
+                $http.post(url, {
+                    deviceId: deviceToken
+                }).then(function() {
                     resolve(deviceToken);
-                }).catch(function () {
+                }).catch(function() {
                     reject("Failed to register device.");
                 })
             });
         };
-        server.unregisterDevice = function (deviceToken) {
+        server.unregisterDevice = function(deviceToken) {
             var url = sidewinderServerHost + "/devices/" + deviceToken;
-            return $q(function (resolve, reject) {
-                $http.delete(url).then(function () {
+            return $q(function(resolve, reject) {
+                $http.delete(url).then(function() {
                     resolve(deviceToken);
-                }).catch(function () {
+                }).catch(function() {
                     reject("Failed to unregister device.");
                 })
             });
         };
-        server.addRepository = function (deviceToken, repo) {
+        server.addRepository = function(deviceToken, repo) {
             var url = sidewinderServerHost + "/devices/" + deviceToken + "/repositories";
-            return $q(function (resolve, reject) {
-                $http.post(url, {name: repo.fullName}).then(function () {
+            return $q(function(resolve, reject) {
+                $http.post(url, {
+                    name: repo.fullName
+                }).then(function() {
                     resolve(repo);
-                }).catch(function () {
+                }).catch(function() {
                     reject("Failed to add repo to server.");
                 })
             });
         };
 
-        server.listRepositories = function (deviceToken) {
-            return $q(function (resolve, reject) {
+        server.listRepositories = function(deviceToken) {
+            return $q(function(resolve, reject) {
                 var url = sidewinderServerHost + "/devices/" + deviceToken + "/repositories";
                 $http.get(url)
-                    .then(function (response) {
-                        resolve(lodash.map(response.data, function(repositoryEntry){
+                    .then(function(response) {
+                        resolve(lodash.map(response.data, function(repositoryEntry) {
                             var elements = repositoryEntry.name.split('/');
                             return new GitHubRepo(elements[0], elements[1]);
                         }));
-                    }).catch(function () {
+                    }).catch(function() {
                         reject("Failed to add repo to server.");
                     })
             })
         }
     })
-    .factory('StatusRefresher', function ($q, RepoAssessor) {
+    .factory('StatusRefresher', function($q, RepoAssessor) {
         function refreshOne(repository) {
             var defer = $q.defer();
-            RepoAssessor.assess(repository).then(function (assessment) {
+            RepoAssessor.assess(repository).then(function(assessment) {
                     repository.status = assessment;
                     defer.resolve(assessment);
                 },
-                function (reason) {
+                function(reason) {
                     console.error(reason);
                     defer.reject(reason);
                 });
@@ -64,22 +68,22 @@ angular.module('sidewinder.services', ['ngLodash'])
         }
 
         return {
-            refreshAll: function (repositories) {
+            refreshAll: function(repositories) {
                 return $q.all(repositories.map(refreshOne));
             }
         };
     })
-    .factory('RepoAssessor', function ($http, $q) {
+    .factory('RepoAssessor', function($http, $q) {
         return {
-            assess: function (repository) {
+            assess: function(repository) {
                 var url = "https://api.github.com/repos/" + repository.fullName + "/commits/master/status";
-                return $q(function (resolve) {
-                    $http.get(url).success(function (data) {
+                return $q(function(resolve) {
+                    $http.get(url).success(function(data) {
                         var state = data.state;
                         if (state === 'pending' && data.statuses.length < 1) {
                             state = 'unknown';
                         }
-                        var statuses = (data.statuses || []).map(function (status) {
+                        var statuses = (data.statuses || []).map(function(status) {
                             return {
                                 state: status.state,
                                 message: status.description,
@@ -88,16 +92,21 @@ angular.module('sidewinder.services', ['ngLodash'])
                                 timestamp: status.updated_at
                             };
                         });
-                        resolve({state: state, statuses: statuses});
-                    }).error(function () {
-                        resolve({state: 'unknown'});
+                        resolve({
+                            state: state,
+                            statuses: statuses
+                        });
+                    }).error(function() {
+                        resolve({
+                            state: 'unknown'
+                        });
                     });
                 });
             }
         };
     })
-    .factory('GitHubRepo', function () {
-        return function (owner, name) {
+    .factory('GitHubRepo', function() {
+        return function(owner, name) {
             var repo = this;
             repo.owner = owner;
             repo.name = name;
@@ -105,19 +114,19 @@ angular.module('sidewinder.services', ['ngLodash'])
                 state: 'unknown'
             };
             Object.defineProperty(repo, 'fullName', {
-                get: function () {
+                get: function() {
                     return repo.owner + '/' + repo.name;
                 }
             });
             Object.defineProperty(repo, 'displayURL', {
-                get: function () {
+                get: function() {
                     return ('https://github.com/' +
-                    (repo.owner || '{owner}') +
-                    '/' +
-                    (repo.name || '{repo-name}'));
+                        (repo.owner || '{owner}') +
+                        '/' +
+                        (repo.name || '{repo-name}'));
                 }
             });
-            repo.toObject = function () {
+            repo.toObject = function() {
                 return {
                     owner: repo.owner,
                     name: repo.name
@@ -125,36 +134,36 @@ angular.module('sidewinder.services', ['ngLodash'])
             }
         };
     })
-    .factory('repositories', function (GitHubRepo, SidewinderServer) {
+    .factory('repositories', function(GitHubRepo, SidewinderServer) {
         var repositories = {};
         var list = [];
-        repositories.add = function (repo) {
+        repositories.add = function(repo) {
             list.push(repo);
             persistLocally();
             if (repositories.deviceToken) {
                 SidewinderServer.addRepository(repositories.deviceToken, repo);
             }
         };
-        repositories.remove = function (repo) {
+        repositories.remove = function(repo) {
             var index = list.indexOf(repo);
             list.splice(index, 1);
             persistLocally();
         };
         Object.defineProperty(repositories, 'list', {
-            get: function () {
+            get: function() {
                 return list;
             }
         });
 
         function persistLocally() {
-            window.localStorage['repositories'] = JSON.stringify(list.map(function (repo) {
+            window.localStorage['repositories'] = JSON.stringify(list.map(function(repo) {
                 return repo.toObject();
             }));
         }
 
         function load() {
             var items = JSON.parse(window.localStorage['repositories'] || '[]');
-            list = items.map(function (object) {
+            list = items.map(function(object) {
                 return new GitHubRepo(object.owner, object.name);
             });
         }
@@ -162,4 +171,33 @@ angular.module('sidewinder.services', ['ngLodash'])
         load();
 
         return repositories;
+    })
+    .factory('PushService', function($q, $ionicPlatform, $window) {
+        function init() {
+            return $q(function(resolve, reject) {
+                $ionicPlatform.ready(function() {
+                    var push = $window.PushNotification.init({
+                        ios: {}
+                    });
+                    var unregister = $q(function(reject, resolve) {
+                        push.unregister(function() {
+                            resolve();
+                        }, function(error) {
+                            reject(error);
+                        });
+                    });
+                    push.on('registration', function(data) {
+                        resolve({
+                            on: push.on,
+                            deviceToken: data.registrationId,
+                            unregister: unregister
+                        });
+                    });
+                });
+            });
+        }
+
+        return {
+            init: init
+        };
     });

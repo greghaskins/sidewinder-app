@@ -12,12 +12,11 @@ app
                 templateUrl: 'settings.html'
             });
     })
-    .run(function($ionicPlatform, $cordovaPush) {
-        var iosPushConfig = {
-            "badge": true,
-            "sound": true,
-            "alert": true
-        };
+    .run(function($ionicPlatform, PushService) {
+
+        PushService.init().then(function(push){
+            console.log("Push deviceToken: " + push.deviceToken);
+        });
 
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -28,11 +27,5 @@ app
             if (window.StatusBar) {
                 StatusBar.styleDefault();
             }
-
-            $cordovaPush.register(iosPushConfig).then(function(deviceToken) {
-                console.log("deviceToken: " + deviceToken);
-            }, function(err) {
-                alert("Registration error: " + err)
-            });
         });
     });
