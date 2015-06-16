@@ -1,6 +1,13 @@
-<ion-view title="Settings">
-    <ion-content ng-controller="RepoConfigController">
-        <ion-list can-swipe="false" show-delete="true">
+<ion-view title="Settings" ng-controller="RepoConfigController">
+    <ion-content>
+        <div class="list list-inset">
+            <div class="item item-divider">Notifications</div>
+            <div class="item item-text-wrap">
+            	<div><span class="left">Push Notifications</span><span class="right">{{pushNotificationsEnabled ? 'ON' : 'OFF' }}</span></div>
+            	<p class="clear">Device Settings ➔ Notifications ➔ Sidewinder</p>
+            </div>
+        </div>
+        <ion-list type="list-inset" can-swipe="false" show-delete="true">
             <div class="item item-divider">Repositories</div>
             <ion-item ng-repeat="repo in repositories.list">
                 {{repo.fullName}}

@@ -200,13 +200,27 @@ angular.module('sidewinder.services', ['ngLodash'])
                     push.on('error', function(err) {
                         console.log("push error: " + err);
                     });
+                    var resolved = false;
                     push.on('registration', function(data) {
+                        resolved = true;
                         resolve({
                             addHandler: addHandler,
                             deviceToken: data.registrationId,
-                            unregister: unregister
+                            unregister: unregister,
+                            enabled: true
                         });
                     });
+                    setTimeout(function() {
+                        if (!resolved) {
+                            resolved = true;
+                            resolve({
+                                addHandler: addHandler,
+                                deviceToken: undefined,
+                                unregister: unregister,
+                                enabled: false
+                            });
+                        }
+                    }, 1500);
                 });
             });
         }

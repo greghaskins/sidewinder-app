@@ -19,6 +19,18 @@ $dark:                            #444 !default;
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
 .assessments {
     header .icon {
         left: 3px;
@@ -32,7 +44,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     .card.success {
         border-left-color: $balanced;
     }
-    .card.failure, .failure header {
+    .card.failure,
+    .failure header {
         border-left-color: $assertive;
     }
     .card.pending {
@@ -41,25 +54,20 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     header span {
         display: inline-block;
     }
-
     .details {
-
         li {
             padding-left: 15px;
             clear: both;
         }
-
         li::before {
             font-family: 'Ionicons';
             margin: 0 0 0 -15px;
             content: '\f462';
             float: left;
         }
-
         li.failure::before {
             content: '\f404';
         }
-
         li.success::before {
             content: '\f3fd';
         }

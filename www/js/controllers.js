@@ -30,7 +30,7 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
             return precedence[repo.status.state] + '--' + repo.fullName;
         }
     })
-    .controller('RepoConfigController', function($scope, $ionicModal, $ionicActionSheet, repositories, GitHubRepo) {
+    .controller('RepoConfigController', function($scope, $ionicModal, $ionicActionSheet, repositories, GitHubRepo, PushService) {
         $scope.repositories = repositories;
 
         var modalScope = $scope.$new(true);
@@ -68,5 +68,10 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
                 },
                 cancelText: 'Cancel'
             });
-        }
+        };
+
+        $scope.pushNotificationsEnabled = false;
+        PushService.init().then(function(push) {
+            $scope.pushNotificationsEnabled = push.enabled;
+        });
     });

@@ -7675,6 +7675,15 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
+.left {
+  float: left; }
+
+.right {
+  float: right; }
+
+.clear {
+  clear: both; }
+
 .assessments header .icon {
   left: 3px; }
 .assessments header .item-icon-left {
