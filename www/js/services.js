@@ -175,6 +175,10 @@ angular.module('sidewinder.services', ['ngLodash'])
     .factory('PushService', function($q, $ionicPlatform, $window) {
         function init() {
             return $q(function(resolve, reject) {
+                if (!window.PushNotification) {
+                    reject('Push notifications not available.');
+                    return;
+                }
                 $ionicPlatform.ready(function() {
                     var push = $window.PushNotification.init({
                         ios: {
@@ -190,10 +194,10 @@ angular.module('sidewinder.services', ['ngLodash'])
                             reject(error);
                         });
                     });
-                    var addHandler = function(callback){
+                    var addHandler = function(callback) {
                         push.on('notification', callback);
                     };
-                    push.on('error', function(err){
+                    push.on('error', function(err) {
                         console.log("push error: " + err);
                     });
                     push.on('registration', function(data) {

@@ -12,10 +12,11 @@ app
                 templateUrl: 'settings.html'
             });
     })
-    .run(function($ionicPlatform, PushService) {
+    .run(function($ionicPlatform, PushService, repositories) {
 
         PushService.init().then(function(push){
             console.log("Push deviceToken: " + push.deviceToken);
+            repositories.deviceToken = push.deviceToken;
         });
 
         $ionicPlatform.ready(function() {
