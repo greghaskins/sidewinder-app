@@ -1,7 +1,7 @@
 var sidewinderServerHost = "http://sidewinder-server-a5b2d643.robertfmurdock.svc.tutum.io:5103";
 
 angular.module('sidewinder.services', ['ngLodash'])
-    .service('SidewinderServer', function($q, $http, GitHubRepo, lodash) {
+    .service('SidewinderServer', function($q, $http, $log, GitHubRepo, lodash) {
         var server = this;
         server.registerDevice = function(deviceToken) {
             var url = sidewinderServerHost + "/devices";
@@ -52,6 +52,23 @@ angular.module('sidewinder.services', ['ngLodash'])
                     })
             })
         }
+    })
+    .factory('loggingHttpInterceptor', function($q, $log){
+        var interceptor = {
+          request: function(config){
+            $log.info('HTTP request:\n' + JSON.stringify(config));
+            return $q(function(resolve, reject){
+              resolve(config);
+            });
+          },
+          response: function(response){
+            return $q(function(resolve, reject){
+              $log.debug('HTTP response:\n' + JSON.stringify(response));
+              resolve(response);
+            });
+          }
+        };
+        return interceptor;
     })
     .factory('StatusRefresher', function($q, RepoAssessor) {
         function refreshOne(repository) {
@@ -134,14 +151,18 @@ angular.module('sidewinder.services', ['ngLodash'])
             }
         };
     })
-    .factory('repositories', function(GitHubRepo, SidewinderServer) {
+    .factory('repositories', function(GitHubRepo, SidewinderServer, $log) {
         var repositories = {};
         var list = [];
         repositories.add = function(repo) {
             list.push(repo);
             persistLocally();
             if (repositories.deviceToken) {
-                SidewinderServer.addRepository(repositories.deviceToken, repo);
+                SidewinderServer.addRepository(repositories.deviceToken, repo).then(function(){
+                  $log.debug('server added repo.')
+                }).catch(function(err){
+                  $log.error('server error: ' + err);
+                });
             }
         };
         repositories.remove = function(repo) {
@@ -172,9 +193,25 @@ angular.module('sidewinder.services', ['ngLodash'])
 
         return repositories;
     })
-    .factory('PushService', function($q, $ionicPlatform, $window) {
+    .factory('PushService', function($q, $ionicPlatform, $window, $log, debugMode) {
+        var deviceToken = undefined;
+        if (debugMode.active && !ionic.Platform.isIOS()) {
+
+          deviceToken = debugMode.deviceToken;
+        }
+        function doNothing() {}
         function init() {
             return $q(function(resolve, reject) {
+                if (debugMode.active && debugMode.deviceToken){
+                  $log.debug('using DEBUG device token: '+ debugMode.deviceToken);
+                  resolve({
+                    addHandler: doNothing,
+                    deviceToken: debugMode.deviceToken,
+                    unregister: doNothing,
+                    enabled: true
+                  });
+                  return;
+                }
                 if (!window.PushNotification) {
                     reject('Push notifications not available.');
                     return;
@@ -200,27 +237,23 @@ angular.module('sidewinder.services', ['ngLodash'])
                     push.on('error', function(err) {
                         console.log("push error: " + err);
                     });
-                    var resolved = false;
+
+                    var doResolve = function() {
+                      $log.info('resolving push registration');
+                      doResolve = doNothing;
+                      resolve({
+                          addHandler: addHandler,
+                          deviceToken: deviceToken,
+                          unregister: unregister,
+                          enabled: !!deviceToken
+                      });
+                    }
                     push.on('registration', function(data) {
-                        resolved = true;
-                        resolve({
-                            addHandler: addHandler,
-                            deviceToken: data.registrationId,
-                            unregister: unregister,
-                            enabled: true
-                        });
+                        $log.info('registration complete');
+                        deviceToken = data.registrationId;
+                        doResolve();
                     });
-                    setTimeout(function() {
-                        if (!resolved) {
-                            resolved = true;
-                            resolve({
-                                addHandler: addHandler,
-                                deviceToken: undefined,
-                                unregister: unregister,
-                                enabled: false
-                            });
-                        }
-                    }, 1500);
+                    setTimeout(function(){ doResolve() }, 1500);
                 });
             });
         }
