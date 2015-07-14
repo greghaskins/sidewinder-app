@@ -16,13 +16,15 @@ app
                 templateUrl: 'settings.html'
             });
         if (debugMode.active) {
-          $log.warn('SIDEWINDER DEBUG MODE ACTIVE');
           $httpProvider.interceptors.push('loggingHttpInterceptor');
         }
     })
-    .run(function($ionicPlatform, PushService, repositories,  $log) {
+    .run(function($ionicPlatform, PushService, repositories,  $log, debugMode) {
 
         $log.info('--- Starting Sidewinder ---');
+        if (debugMode.active) {
+          $log.warn('SIDEWINDER DEBUG MODE ACTIVE');
+        }
 
         $ionicPlatform.ready(function() {
           PushService.init().then(function(push){
