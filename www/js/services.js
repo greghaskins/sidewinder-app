@@ -55,26 +55,21 @@ angular.module('sidewinder.services', ['ngLodash'])
     })
     .factory('RepositoryRepository', function($q, SidewinderServer, PushService){
       var Repository = {};
-      Repository.all = function(){
-        return $q(function(resolve, reject){
-          PushService.init().then(function(push){
-            SidewinderServer.listRepositories(push.deviceToken).then(function(results){
-              resolve(results);
-            }).catch(function(err){
-              reject(err);
-            });
-          }).catch(function(err){
-            console.log(err);
-            reject(err);
-          });
+      function getDeviceToken() {
+        return PushService.init().then(function(push) {
+          return push.deviceToken;
+        });
+      }
+      Repository.all = function() {
+        return getDeviceToken().then(function(deviceToken) {
+          return SidewinderServer.listRepositories(deviceToken);
         });
       };
       Repository.add = function(repo) {
-        return $q(function(resolve, reject){
-          PushService.init().then(function(push){
-            SidewinderServer.addRepository(push.deviceToken, repo).then(resolve).catch(reject);
-          });
-        })};
+        return getDeviceToken().then(function(deviceToken) {
+          return SidewinderServer.addRepository(deviceToken, repo);
+        })
+      };
       return Repository;
     })
     .factory('loggingHttpInterceptor', function($q, $log){
