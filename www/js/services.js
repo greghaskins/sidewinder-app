@@ -235,7 +235,7 @@ angular.module('sidewinder.services', ['ngLodash'])
                         push.on('notification', callback);
                     };
                     push.on('error', function(err) {
-                        console.log("push error: " + err);
+                        $log.error("push error: " + err);
                     });
 
                     var doResolve = function() {

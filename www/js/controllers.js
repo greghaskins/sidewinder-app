@@ -1,5 +1,5 @@
 angular.module('sidewinder.controllers', ['sidewinder.services'])
-    .controller('StatusController', function($scope, repositories, StatusRefresher, PushService) {
+    .controller('StatusController', function($scope, repositories, StatusRefresher, PushService, $log) {
         $scope.repositories = repositories;
 
         function refreshComplete() {
@@ -7,14 +7,14 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
         }
 
         $scope.refresh = function() {
-            console.log('Refreshing...');
+            $log.info('Refreshing view...');
             StatusRefresher.refreshAll(repositories.list).then(refreshComplete, refreshComplete);
         };
 
         $scope.$on('$ionicView.beforeEnter', $scope.refresh);
         PushService.init().then(function(push) {
             push.addHandler(function(data) {
-                console.log('Received push notification: ' + JSON.stringify(data));
+                $log.info('Received push notification: ' + JSON.stringify(data));
                 $scope.refresh();
             });
         });

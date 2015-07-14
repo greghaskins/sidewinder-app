@@ -19,13 +19,13 @@ app
           $httpProvider.interceptors.push('loggingHttpInterceptor');
         }
     })
-    .run(function($ionicPlatform, PushService, repositories) {
+    .run(function($ionicPlatform, PushService, repositories,  $log) {
 
-        console.log('--- Starting Sidewinder ---');
+        $log.info('--- Starting Sidewinder ---');
 
         $ionicPlatform.ready(function() {
           PushService.init().then(function(push){
-              console.log("Push deviceToken: " + push.deviceToken);
+              $log.debug("Push deviceToken: " + push.deviceToken);
               repositories.deviceToken = push.deviceToken;
           });
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
