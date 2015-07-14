@@ -10,10 +10,11 @@ describe('the repositories model', function () {
         GitHubRepo = _GitHubRepo_;
         httpBackend = _$httpBackend_;
         httpBackend.whenGET(/.*/).respond(200, '');
-        httpBackend.flush();
+        httpBackend.whenPOST(/.*/).respond(200, '');
     }));
 
     afterEach(function () {
+        httpBackend.flush();
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
     });
@@ -33,7 +34,6 @@ describe('the repositories model', function () {
         repositories.deviceToken = deviceToken;
         repositories.add(repo);
         expect(repositories.list).toContain(repo);
-        httpBackend.flush();
     });
 
     it('can remove items', function () {
