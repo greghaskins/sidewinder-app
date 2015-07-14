@@ -1,7 +1,7 @@
 var sidewinderServerHost = "http://sidewinder-server-a5b2d643.robertfmurdock.svc.tutum.io:5103";
 
 angular.module('sidewinder.services', ['ngLodash'])
-    .service('SidewinderServer', function($q, $http, $log, GitHubRepo, lodash) {
+    .service('SidewinderServer', function($q, $http, GitHubRepo, lodash) {
         var server = this;
         server.registerDevice = function(deviceToken) {
             var url = sidewinderServerHost + "/devices";
