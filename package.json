@@ -15,8 +15,11 @@
     "angular-mocks": "^1.3.13",
     "bower": "^1.3.3",
     "cordova": "^5.1.1",
+    "gulp": "https://registry.npmjs.org/gulp/-/gulp-3.9.0.tgz",
     "gulp-util": "^2.2.14",
     "ionic": "^1.5.2",
+    "ios-deploy": "^1.7.0",
+    "ios-sim": "^4.1.1",
     "jasmine-core": "^2.3.4",
     "karma": "^0.12.35",
     "karma-chrome-launcher": "^0.1.12",
@@ -37,14 +40,13 @@
     "ios"
   ],
   "scripts": {
-    "postinstall": "npm install -g ionic cordova ios-sim ios-deploy bower gulp",
-    "start": "ionic serve --lab",
+    "start": "npm run ionic -- serve --lab",
     "test": "npm run karma:headless",
     "tdd": "npm run karma:watch",
     "ionic": "./node_modules/ionic/bin/ionic",
     "karma": "./node_modules/karma/bin/karma start test/karma.conf.js",
     "karma:watch": "npm run karma -- --auto-watch --no-single-run",
     "karma:headless": "npm run karma -- --single-run --no-auto-watch",
-    "ios": "ionic run --device --livereload --consolelogs"
+    "ios": "npm run ionic -- run --device --livereload --consolelogs"
   }
 }

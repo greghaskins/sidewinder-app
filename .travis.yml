@@ -1,5 +1,7 @@
 sudo: false
 language: objective-c
+before_script:
+  - export PATH=$PWD/node_modules/.bin:$PATH
 install:
   - brew update
   - brew unlink node
