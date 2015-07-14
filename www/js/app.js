@@ -16,6 +16,7 @@ app
                 templateUrl: 'settings.html'
             });
         if (debugMode.active) {
+          $log.warn('SIDEWINDER DEBUG MODE ACTIVE');
           $httpProvider.interceptors.push('loggingHttpInterceptor');
         }
     })
