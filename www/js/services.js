@@ -47,11 +47,30 @@ angular.module('sidewinder.services', ['ngLodash'])
                             var elements = repositoryEntry.name.split('/');
                             return new GitHubRepo(elements[0], elements[1]);
                         }));
-                    }).catch(function() {
-                        reject("Failed to add repo to server.");
+                    }).catch(function(err) {
+                        reject("Failed to retrieve repos from server.");
                     })
             })
         }
+    })
+    .factory('RepositoryRepository', function($q, GitHubRepo, SidewinderServer, PushService){
+      var Repository = {};
+      Repository.all = function(){
+        return $q(function(resolve, reject){
+          PushService.init().then(function(push){
+            SidewinderServer.listRepositories(push.deviceToken).then(function(results){
+              resolve(results);
+            }).catch(function(err){
+              console.error(err);
+              reject(err);
+            });
+          }).catch(function(err){
+            console.log(err);
+            reject(err);
+          });
+        });
+      };
+      return Repository;
     })
     .factory('loggingHttpInterceptor', function($q, $log){
         var interceptor = {
