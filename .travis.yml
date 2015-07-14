@@ -8,6 +8,7 @@ install:
   - brew install node
 script:
   - npm install
+  - npm ls
   - ionic info
   - npm test
 after_failure:
