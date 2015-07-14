@@ -44,7 +44,7 @@
     "tdd": "npm run karma:watch",
     "ionic": "./node_modules/ionic/bin/ionic",
     "karma": "./node_modules/karma/bin/karma start test/karma.conf.js",
-    "karma:watch": "npm run karma -- --auto-watch --no-single-run",
+    "karma:watch": "npm run karma -- --auto-watch --no-single-run  --reporters dots,notify",
     "karma:headless": "npm run karma -- --single-run --no-auto-watch",
     "ios": "npm run ionic -- run --device --livereload --consolelogs"
   }
