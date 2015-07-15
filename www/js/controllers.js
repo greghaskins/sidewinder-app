@@ -46,24 +46,37 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
             return precedence[repo.status.state] + '--' + repo.fullName;
         }
     })
-    .controller('RepoConfigController', function($scope, $ionicModal, $ionicActionSheet, repositories, GitHubRepo, PushService) {
-        $scope.repositories = repositories;
+    .controller('RepoConfigController', function($scope, $log, $ionicModal, $ionicActionSheet, RepositoryRepository, GitHubRepo, PushService) {
+          $scope.repositories = [];
 
-        var modalScope = $scope.$new(true);
-        $ionicModal.fromTemplateUrl('edit-repo.html', {
+          function refreshRepos() {
+            RepositoryRepository.all().then(function(results) {
+                $scope.repositories = results;
+              })
+              .catch(function(err) {
+                $log.error(err);
+              });
+          }
+          refreshRepos();
+
+          var modalScope = $scope.$new(true);
+          $ionicModal.fromTemplateUrl('edit-repo.html', {
             scope: modalScope,
             animation: 'slide-in-up',
             focusFirstInput: true
-        }).then(function(modal) {
+          }).then(function(modal) {
             $scope.modal = modal;
             modalScope.cancel = function() {
-                modal.hide();
+              modal.hide();
             };
             modalScope.save = function(repo) {
-                repositories.add(new GitHubRepo(repo.owner, repo.name));
+              RepositoryRepository.add(new GitHubRepo(repo.owner, repo.name))
+              .then(refreshRepos)
+              .then(function() {
                 modal.hide();
+              });
             }
-        });
+          });
 
         $scope.addRepository = function() {
             modalScope.repo = new GitHubRepo('', '');
@@ -90,4 +103,13 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
         PushService.init().then(function(push) {
             $scope.pushNotificationsEnabled = push.enabled;
         });
+    })
+    .service('ErrorHandler', function($ionicPopup){
+      var ErrorHandler = this;
+      this.handle = function(error) {
+        return $ionicPopup.alert({
+          title: 'Whoops!',
+          template: 'An error occurred:<br>' + err
+        });
+      }
     });

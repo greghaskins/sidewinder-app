@@ -9,7 +9,7 @@
         </div>
         <ion-list type="list-inset" can-swipe="false" show-delete="false">
             <div class="item item-divider">Repositories</div>
-            <ion-item ng-repeat="repo in repositories.list">
+            <ion-item ng-repeat="repo in repositories">
                 {{repo.fullName}}
                 <ion-delete-button class="ion-ios-minus" ng-click="removeRepo(repo)"></ion-delete-button>
             </ion-item>
