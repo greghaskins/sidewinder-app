@@ -44,7 +44,7 @@ angular.module('sidewinder.services', ['ngLodash'])
                 $http.get(url)
                     .then(function(response) {
                         resolve(lodash.map(response.data, function(repositoryEntry) {
-                            var elements = repositoryEntry.name.split('/');
+                            var elements = repositoryEntry.Name.split('/');
                             return new GitHubRepo(elements[0], elements[1]);
                         }));
                     }).catch(function(err) {

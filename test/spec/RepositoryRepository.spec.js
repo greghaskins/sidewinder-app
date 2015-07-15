@@ -38,9 +38,9 @@ describe('the RepositoryRepository', function() {
 
         $httpBackend.whenGET(serverEndpoint)
           .respond(200, [{
-            name: 'owner1/repo1'
+            Name: 'owner1/repo1'
           }, {
-            name: 'owner2/repo2'
+            Name: 'owner2/repo2'
           }]);
         RepositoryRepository.all().then(function(result) {
             expect(result.length).toBe(2);

@@ -99,7 +99,7 @@ describe('SidewinderServer', function () {
                 var repo = new GitHubRepo('Tim', 'Veggiesaurus');
                 var deviceToken = 'lol3irfdsd';
                 $httpBackend.expectGET(sidewinderServerHost + '/devices/' + deviceToken + '/repositories')
-                    .respond(200, [{name: 'things/thing1'}, {name: 'things/thing2'}]);
+                    .respond(200, [{Name: 'things/thing1'}, {Name: 'things/thing2'}]);
                 SidewinderServer.listRepositories(deviceToken)
                     .then(function (result) {
                         expect(result.length).toBe(2);
