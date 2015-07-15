@@ -7698,6 +7698,8 @@ a.button {
   border-left-color: #ffc900; }
 .assessments header span {
   display: inline-block; }
+.assessments .item-note img {
+  vertical-align: middle; }
 .assessments .details li {
   padding-left: 15px;
   clear: both; }

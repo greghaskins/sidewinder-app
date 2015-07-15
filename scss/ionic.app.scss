@@ -54,6 +54,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     header span {
         display: inline-block;
     }
+    .item-note img {
+        vertical-align: middle;
+    }
     .details {
         li {
             padding-left: 15px;
