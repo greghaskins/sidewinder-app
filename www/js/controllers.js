@@ -1,5 +1,5 @@
 angular.module('sidewinder.controllers', ['sidewinder.services'])
-    .controller('StatusController', function($scope, $log, $q, RepoAssessor, PushService,  RepositoryRepository) {
+    .controller('StatusController', function($scope, $log, $q, RepoAssessor, PushService,  RepositoryRepository, ErrorHandler) {
         $scope.repositories = [];
 
         function refreshComplete() {
@@ -21,9 +21,7 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
             .then(function(results) {
               $scope.repositories = results;
             })
-            .catch(function(err) {
-              $log.error(err);
-            })
+            .catch(ErrorHandler.handle)
             .finally(refreshComplete);
         };
 
@@ -33,7 +31,7 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
                 $log.info('Received push notification: ' + JSON.stringify(data));
                 $scope.refresh();
             });
-        });
+        }).then($scope.refresh);
 
         var precedence = {
             'failure': 0,
@@ -46,18 +44,16 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
             return precedence[repo.status.state] + '--' + repo.fullName;
         }
     })
-    .controller('RepoConfigController', function($scope, $log, $ionicModal, $ionicActionSheet, RepositoryRepository, GitHubRepo, PushService) {
+    .controller('RepoConfigController', function($scope, $ionicModal, $ionicActionSheet, RepositoryRepository, GitHubRepo, PushService, ErrorHandler) {
           $scope.repositories = [];
 
-          function refreshRepos() {
+          $scope.refresh = function() {
             RepositoryRepository.all().then(function(results) {
                 $scope.repositories = results;
               })
-              .catch(function(err) {
-                $log.error(err);
-              });
+              .catch(ErrorHandler.handle);
           }
-          refreshRepos();
+          $scope.$on('$ionicView.beforeEnter', $scope.refresh);
 
           var modalScope = $scope.$new(true);
           $ionicModal.fromTemplateUrl('edit-repo.html', {
@@ -71,10 +67,11 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
             };
             modalScope.save = function(repo) {
               RepositoryRepository.add(new GitHubRepo(repo.owner, repo.name))
-              .then(refreshRepos)
+              .then($scope.refresh)
               .then(function() {
                 modal.hide();
-              });
+              })
+              .catch(ErrorHandler.handle);
             }
           });
 
@@ -92,7 +89,7 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
                 titleText: 'Remove <b>' + repo.fullName + '</b>?',
                 destructiveText: 'Remove',
                 destructiveButtonClicked: function() {
-                    repositories.remove(repo);
+                    // TODO: actually delete stuff
                     hideSheet();
                 },
                 cancelText: 'Cancel'
@@ -107,9 +104,10 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
     .service('ErrorHandler', function($ionicPopup){
       var ErrorHandler = this;
       this.handle = function(error) {
+        console.error(error);
         return $ionicPopup.alert({
           title: 'Whoops!',
-          template: 'An error occurred:<br>' + err
+          template: 'An error occurred:<br><br>' + error
         });
       }
     });

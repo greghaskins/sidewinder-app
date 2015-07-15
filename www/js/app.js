@@ -19,7 +19,7 @@ app
           $httpProvider.interceptors.push('loggingHttpInterceptor');
         }
     })
-    .run(function($ionicPlatform, PushService, $log, debugMode) {
+    .run(function($ionicPlatform, PushService, $log, debugMode, SidewinderServer) {
 
         $log.info('--- Starting Sidewinder ---');
         if (debugMode.active) {
@@ -29,7 +29,8 @@ app
         $ionicPlatform.ready(function() {
           PushService.init().then(function(push){
               $log.debug("Push deviceToken: " + push.deviceToken);
-          });
+              return push.deviceToken;
+          }).then(SidewinderServer.registerDevice);
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
             if (window.cordova && window.cordova.plugins.Keyboard) {

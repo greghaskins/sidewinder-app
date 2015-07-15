@@ -46,6 +46,6 @@
     "karma": "./node_modules/karma/bin/karma start test/karma.conf.js",
     "karma:watch": "npm run karma -- --auto-watch --no-single-run  --reporters dots,notify",
     "karma:headless": "npm run karma -- --single-run --no-auto-watch",
-    "ios": "npm run ionic -- run --device --livereload --consolelogs"
+    "ios": "npm run ionic -- run ios --device --livereload --consolelogs"
   }
 }

@@ -4,6 +4,7 @@ angular.module('sidewinder.services', ['ngLodash'])
     .service('SidewinderServer', function($q, $http, GitHubRepo, lodash) {
         var server = this;
         server.registerDevice = function(deviceToken) {
+          console.debug('registering device ' + deviceToken);
             var url = sidewinderServerHost + "/devices";
             return $q(function(resolve, reject) {
                 $http.post(url, {
@@ -169,11 +170,11 @@ angular.module('sidewinder.services', ['ngLodash'])
                   });
                   return;
                 }
-                if (!window.PushNotification) {
-                    reject('Push notifications not available.');
-                    return;
-                }
                 $ionicPlatform.ready(function() {
+                    if (!window.PushNotification) {
+                        reject('Push notifications not available.');
+                        return;
+                    }
                     var push = $window.PushNotification.init({
                         ios: {
                             badge: true,
@@ -196,7 +197,6 @@ angular.module('sidewinder.services', ['ngLodash'])
                     });
 
                     var doResolve = function() {
-                      $log.info('resolving push registration');
                       doResolve = doNothing;
                       resolve({
                           addHandler: addHandler,
@@ -206,7 +206,6 @@ angular.module('sidewinder.services', ['ngLodash'])
                       });
                     }
                     push.on('registration', function(data) {
-                        $log.info('registration complete');
                         deviceToken = data.registrationId;
                         doResolve();
                     });
