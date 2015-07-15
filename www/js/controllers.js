@@ -1,6 +1,8 @@
 angular.module('sidewinder.controllers', ['sidewinder.services'])
-    .controller('StatusController', function($scope, repositories, StatusRefresher, PushService, $log) {
-        $scope.repositories = repositories;
+    .controller('StatusController', function($scope, repositories, StatusRefresher, PushService, $log, RepositoryRepository) {
+        $scope.repositories = {
+          list: []
+        };
 
         function refreshComplete() {
             $scope.$broadcast('scroll.refreshComplete');
@@ -8,7 +10,15 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
 
         $scope.refresh = function() {
             $log.info('Refreshing view...');
-            StatusRefresher.refreshAll(repositories.list).then(refreshComplete, refreshComplete);
+            RepositoryRepository.all()
+            .then(function(results){
+              StatusRefresher.refreshAll(results);
+              $scope.repositories.list = results;
+            })
+            .catch(function(err){
+              $log.error(err);
+            }).finally(refreshComplete);
+            //StatusRefresher.refreshAll(repositories.list).then(refreshComplete, refreshComplete);
         };
 
         $scope.$on('$ionicView.beforeEnter', $scope.refresh);

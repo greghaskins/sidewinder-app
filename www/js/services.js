@@ -94,7 +94,7 @@ angular.module('sidewinder.services', ['ngLodash'])
             var defer = $q.defer();
             RepoAssessor.assess(repository).then(function(assessment) {
                     repository.status = assessment;
-                    defer.resolve(assessment);
+                    defer.resolve(repository);
                 },
                 function(reason) {
                     console.error(reason);
@@ -218,7 +218,7 @@ angular.module('sidewinder.services', ['ngLodash'])
 
           deviceToken = debugMode.deviceToken;
         }
-        function doNothing() {}
+        var doNothing = angular.noop;
         function init() {
             return $q(function(resolve, reject) {
                 if (debugMode.active && debugMode.deviceToken){
