@@ -89,26 +89,6 @@ angular.module('sidewinder.services', ['ngLodash'])
         };
         return interceptor;
     })
-    .factory('StatusRefresher', function($q, RepoAssessor) {
-        function refreshOne(repository) {
-            var defer = $q.defer();
-            RepoAssessor.assess(repository).then(function(assessment) {
-                    repository.status = assessment;
-                    defer.resolve(repository);
-                },
-                function(reason) {
-                    console.error(reason);
-                    defer.reject(reason);
-                });
-            return defer.promise;
-        }
-
-        return {
-            refreshAll: function(repositories) {
-                return $q.all(repositories.map(refreshOne));
-            }
-        };
-    })
     .factory('RepoAssessor', function($http, $q) {
         return {
             assess: function(repository) {

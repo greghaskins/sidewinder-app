@@ -1,5 +1,5 @@
 angular.module('sidewinder.controllers', ['sidewinder.services'])
-    .controller('StatusController', function($scope, repositories, StatusRefresher, PushService, $log, RepositoryRepository) {
+    .controller('StatusController', function($scope, $log, $q, RepoAssessor, PushService,  RepositoryRepository) {
         $scope.repositories = {
           list: []
         };
@@ -9,16 +9,24 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
         }
 
         $scope.refresh = function() {
-            $log.info('Refreshing view...');
-            RepositoryRepository.all()
-            .then(function(results){
-              StatusRefresher.refreshAll(results);
+          $log.info('Refreshing view...');
+
+          RepositoryRepository.all()
+            .then(function(results) {
+              return $q.all(results.map(function(repo) {
+                return RepoAssessor.assess(repo).then(function(assessment) {
+                  repo.status = assessment;
+                  return repo;
+                })
+              }));
+            })
+            .then(function(results) {
               $scope.repositories.list = results;
             })
-            .catch(function(err){
+            .catch(function(err) {
               $log.error(err);
-            }).finally(refreshComplete);
-            //StatusRefresher.refreshAll(repositories.list).then(refreshComplete, refreshComplete);
+            })
+            .finally(refreshComplete);
         };
 
         $scope.$on('$ionicView.beforeEnter', $scope.refresh);
