@@ -150,48 +150,6 @@ angular.module('sidewinder.services', ['ngLodash'])
             }
         };
     })
-    .factory('repositories', function(GitHubRepo, SidewinderServer, $log) {
-        var repositories = {};
-        var list = [];
-        repositories.add = function(repo) {
-            list.push(repo);
-            persistLocally();
-            if (repositories.deviceToken) {
-                SidewinderServer.addRepository(repositories.deviceToken, repo).then(function(){
-                  $log.debug('server added repo.')
-                }).catch(function(err){
-                  $log.error('server error: ' + err);
-                });
-            }
-        };
-        repositories.remove = function(repo) {
-            var index = list.indexOf(repo);
-            list.splice(index, 1);
-            persistLocally();
-        };
-        Object.defineProperty(repositories, 'list', {
-            get: function() {
-                return list;
-            }
-        });
-
-        function persistLocally() {
-            window.localStorage['repositories'] = JSON.stringify(list.map(function(repo) {
-                return repo.toObject();
-            }));
-        }
-
-        function load() {
-            var items = JSON.parse(window.localStorage['repositories'] || '[]');
-            list = items.map(function(object) {
-                return new GitHubRepo(object.owner, object.name);
-            });
-        }
-
-        load();
-
-        return repositories;
-    })
     .factory('PushService', function($q, $ionicPlatform, $window, $log, debugMode) {
         var deviceToken = undefined;
         if (debugMode.active && !ionic.Platform.isIOS()) {
