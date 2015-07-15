@@ -7,12 +7,12 @@
     <ion-pane>
         <ion-content ng-cloak>
             <ion-refresher on-refresh="refresh()"></ion-refresher>
-            <div ng-switch="repositories.list.length > 0" class="assessments">
-                <div ng-switch-when="true" class="card assessment {{repo.status.state}}" ng-repeat="repo in repositories.list | orderBy:troubleOnTop">
+            <div ng-switch="repositories.length > 0" class="assessments">
+                <div ng-switch-when="true" class="card assessment {{repo.status.state}}" ng-repeat="repo in repositories | orderBy:troubleOnTop">
                     <div ng-switch="repo.status.state">
                         <header ng-switch-when="success" class="success item item-text-wrap item-icon-left">
                             <i class="icon ion-ios-checkmark-empty balanced"></i>
-                            <span class="repo">  
+                            <span class="repo">
                           <span class="owner">{{repo.owner}}</span> /
                             <span class="name">{{repo.name}}</span>
                             </span>

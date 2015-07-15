@@ -1,8 +1,6 @@
 angular.module('sidewinder.controllers', ['sidewinder.services'])
     .controller('StatusController', function($scope, $log, $q, RepoAssessor, PushService,  RepositoryRepository) {
-        $scope.repositories = {
-          list: []
-        };
+        $scope.repositories = [];
 
         function refreshComplete() {
             $scope.$broadcast('scroll.refreshComplete');
@@ -21,7 +19,7 @@ angular.module('sidewinder.controllers', ['sidewinder.services'])
               }));
             })
             .then(function(results) {
-              $scope.repositories.list = results;
+              $scope.repositories = results;
             })
             .catch(function(err) {
               $log.error(err);
