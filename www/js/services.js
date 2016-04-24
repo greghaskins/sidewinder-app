@@ -1,4 +1,4 @@
-var sidewinderServerHost = "http://sidewinder-server-a5b2d643.robertfmurdock.svc.tutum.io:5103";
+var sidewinderServerHost = "http://sidewinder-server.sidewinder.1558821d.svc.dockerapp.io:5103";
 
 angular.module('sidewinder.services', ['ngLodash'])
     .service('SidewinderServer', function($q, $http, GitHubRepo, lodash) {
